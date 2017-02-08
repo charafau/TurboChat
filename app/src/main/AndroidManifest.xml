@@ -3,13 +3,17 @@
     package="com.nullpointerbay.turbochat">
 
     <application
+        android:name=".TurboChatApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".acitivity.MainActivity" />
+
+        <activity android:name=".acitivity.SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
