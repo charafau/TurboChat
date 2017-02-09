@@ -29,4 +29,8 @@ public class TurboChatBaseApplication extends Application {
                 .build();
         turboChatComponent.inject(this);
     }
+
+    public TurboChatComponent getTurboChatComponent() {
+        return turboChatComponent;
+    }
 }
