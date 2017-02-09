@@ -6,17 +6,24 @@ import com.nullpointerbay.turbochat.di.DaggerTurboChatComponent;
 import com.nullpointerbay.turbochat.di.TurboChatComponent;
 import com.nullpointerbay.turbochat.di.TurboChatModule;
 
-public class TurboChatApplication extends Application {
+import timber.log.Timber;
 
-    private TurboChatComponent turboChatComponent;
+public class TurboChatBaseApplication extends Application {
+
+    protected TurboChatComponent turboChatComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
+
         setupDagger();
     }
 
-    private void setupDagger() {
+    protected void setupDagger() {
         turboChatComponent = DaggerTurboChatComponent.builder()
                 .turboChatModule(new TurboChatModule(this))
                 .build();

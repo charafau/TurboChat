@@ -10,9 +10,9 @@
         android:roundIcon="@drawable/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".acitivity.MainActivity" />
+        <activity android:name=".activity.MainActivity" />
 
-        <activity android:name=".acitivity.SplashActivity"
+        <activity android:name=".activity.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

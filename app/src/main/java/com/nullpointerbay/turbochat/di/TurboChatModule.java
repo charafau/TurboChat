@@ -2,7 +2,7 @@ package com.nullpointerbay.turbochat.di;
 
 import android.content.Context;
 
-import com.nullpointerbay.turbochat.TurboChatApplication;
+import com.nullpointerbay.turbochat.TurboChatBaseApplication;
 
 import javax.inject.Singleton;
 
@@ -12,9 +12,9 @@ import dagger.Provides;
 @Module
 public class TurboChatModule {
 
-    private final TurboChatApplication application;
+    private final TurboChatBaseApplication application;
 
-    public TurboChatModule(TurboChatApplication application) {
+    public TurboChatModule(TurboChatBaseApplication application) {
         this.application = application;
     }
 

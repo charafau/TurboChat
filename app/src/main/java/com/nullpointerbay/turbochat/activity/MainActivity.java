@@ -1,11 +1,11 @@
-package com.nullpointerbay.turbochat.acitivity;
+package com.nullpointerbay.turbochat.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import com.nullpointerbay.turbochat.R;
+import com.nullpointerbay.turbochat.base.BaseActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

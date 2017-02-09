@@ -1,4 +1,4 @@
-package com.nullpointerbay.turbochat.acitivity;
+package com.nullpointerbay.turbochat.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
