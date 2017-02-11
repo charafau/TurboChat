@@ -1,10 +1,13 @@
 package com.nullpointerbay.turbochat.model;
 
 
+import java.util.List;
+
 public class Team {
     private String uuid;
     private String name;
     private String photoUrl;
+    private List<User> teamUsers;
 
     public Team(String uuid, String name, String photoUrl) {
         this.uuid = uuid;

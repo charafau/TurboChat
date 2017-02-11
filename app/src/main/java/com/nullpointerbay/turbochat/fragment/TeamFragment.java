@@ -1,11 +1,10 @@
 package com.nullpointerbay.turbochat.fragment;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.SpannableString;
-import android.text.style.ImageSpan;
+import android.text.method.LinkMovementMethod;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +15,12 @@ import com.nullpointerbay.turbochat.base.BaseFragment;
 import com.nullpointerbay.turbochat.di.DaggerViewComponent;
 import com.nullpointerbay.turbochat.di.TurboChatComponent;
 import com.nullpointerbay.turbochat.di.ViewModule;
+import com.nullpointerbay.turbochat.parsers.EmojiParser;
+import com.nullpointerbay.turbochat.spans.CustomLinkSpan;
 import com.nullpointerbay.turbochat.viewmodel.TeamViewModel;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,31 +50,47 @@ public class TeamFragment extends BaseFragment {
 
         teamViewModel.test();
 
-        String message = "Good morning! (megusta) (coffee)";
+        String message = "Good morning! (megusta) (coffee) here is" +
+                " some link\n https://www.youtube.com/watch?v=7Ky6ZaodBkU&t=2473s \nshould " +
+                "be highlighted and @alex is nice";
 
-        Pattern pattern = Pattern.compile("\\(megusta\\)");
-        Matcher matcher = pattern.matcher(message);
-        SpannableString spannableString
-                = new SpannableString(message);
+        List<String> emojiList = new ArrayList<>();
+        emojiList.add("megusta");
+        emojiList.add("dummy");
+        emojiList.add("coffee");
 
-        Bitmap octopus = null;
-        int size = (int) (-txtMessage.getPaint().ascent());
-        while (matcher.find()) {
-            if (octopus == null) {
-                Bitmap bitmap = BitmapFactory.decodeResource(
-                        getResources(), R.drawable.emoji_megusta);
-                octopus = Bitmap.createScaledBitmap(
-                        bitmap, size, size, true);
-                bitmap.recycle();
-            }
-            ImageSpan span = new ImageSpan(getContext(), octopus, ImageSpan.ALIGN_BASELINE);
-            spannableString.setSpan(
-                    span, matcher.start(), matcher.end(), 0);
-        }
+        final EmojiParser emoji = new EmojiParser(getContext(), emojiList, "emoji");
+
+        SpannableString spannableString = emoji.insertEmoji(message, (int) (-txtMessage.getPaint().ascent()));
+
+        insertLinks(spannableString);
+        insertMentions(spannableString);
+
 
         txtMessage.setText(spannableString);
+        txtMessage.setMovementMethod(LinkMovementMethod.getInstance());
+
 
         return view;
+    }
+
+    private void insertLinks(SpannableString spannableString) {
+
+        final Pattern pattern = Patterns.WEB_URL;
+        final Matcher matcher = pattern.matcher(spannableString);
+        while (matcher.find()) {
+            final CustomLinkSpan customLinkSpan = new CustomLinkSpan(getContext(), "http://www.dug.net.pl");
+            spannableString.setSpan(customLinkSpan, matcher.start(), matcher.end(), 0);
+        }
+    }
+
+    private void insertMentions(SpannableString spannableString) {
+        Pattern pattern = Pattern.compile("@([A-Za-z0-9_-]+)");
+        final Matcher matcher = pattern.matcher(spannableString);
+        while (matcher.find()) {
+            final CustomLinkSpan customLinkSpan = new CustomLinkSpan(getContext(), "http://www.dug.net.pl");
+            spannableString.setSpan(customLinkSpan, matcher.start(), matcher.end(), 0);
+        }
     }
 
     @Override
