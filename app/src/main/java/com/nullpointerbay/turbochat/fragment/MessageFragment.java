@@ -17,6 +17,7 @@ import com.nullpointerbay.turbochat.di.TurboChatComponent;
 import com.nullpointerbay.turbochat.di.ViewModule;
 import com.nullpointerbay.turbochat.model.Message;
 import com.nullpointerbay.turbochat.model.Team;
+import com.nullpointerbay.turbochat.utils.ImageLoader;
 import com.nullpointerbay.turbochat.viewmodel.MessageViewModel;
 
 import java.util.ArrayList;
@@ -44,6 +45,8 @@ public class MessageFragment extends BaseFragment {
     RecyclerView recyclerMessages;
     @BindView(R.id.progress)
     ProgressBar progress;
+    @Inject
+    ImageLoader imageLoader;
     private Team team;
     private MessageAdapter adapter;
 
@@ -116,6 +119,7 @@ public class MessageFragment extends BaseFragment {
         public void onBindViewHolder(MessageViewHolder holder, int position) {
             final Message message = messages.get(position);
             holder.txtMessage.setText(message.getText());
+
         }
 
         @Override

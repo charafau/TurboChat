@@ -5,6 +5,7 @@ import android.content.Context;
 import com.nullpointerbay.turbochat.TurboChatBaseApplication;
 import com.nullpointerbay.turbochat.repository.MessageRepository;
 import com.nullpointerbay.turbochat.repository.TeamRepository;
+import com.nullpointerbay.turbochat.utils.ImageLoader;
 import com.nullpointerbay.turbochat.utils.UserResolver;
 
 import javax.inject.Singleton;
@@ -25,5 +26,7 @@ public interface TurboChatComponent {
     UserResolver getUserResolver();
 
     MessageRepository getMessageRepository();
+
+    ImageLoader getImageLoader();
 
 }

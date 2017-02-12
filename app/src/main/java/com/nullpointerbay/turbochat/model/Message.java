@@ -17,20 +17,23 @@ public class Message implements Parcelable {
     List<String> mentions;
     List<String> emoticons;
     List<Link> links;
+    User user;
 
-    public Message(long id, String text, List<String> mentions, List<String> emoticons, List<Link> links) {
+    public Message(long id, String text, List<String> mentions, List<String> emoticons, List<Link> links, User user) {
         this.id = id;
         this.text = text;
         this.mentions = mentions;
         this.emoticons = emoticons;
         this.links = links;
+        this.user = user;
     }
 
-    public Message(String text, List<String> mentions, List<String> emoticons, List<Link> links) {
+    public Message(String text, List<String> mentions, List<String> emoticons, List<Link> links, User user) {
         this.text = text;
         this.mentions = mentions;
         this.emoticons = emoticons;
         this.links = links;
+        this.user = user;
     }
 
     protected Message(Parcel in) {

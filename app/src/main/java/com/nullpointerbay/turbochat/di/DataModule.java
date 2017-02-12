@@ -4,6 +4,8 @@ import com.nullpointerbay.turbochat.repository.MessageRepository;
 import com.nullpointerbay.turbochat.repository.MessageRepositoryImpl;
 import com.nullpointerbay.turbochat.repository.TeamRepository;
 import com.nullpointerbay.turbochat.repository.TeamRepositoryImpl;
+import com.nullpointerbay.turbochat.utils.ImageLoader;
+import com.nullpointerbay.turbochat.utils.PicassoImageLoader;
 import com.nullpointerbay.turbochat.utils.UserResolver;
 import com.nullpointerbay.turbochat.utils.UserResolverImpl;
 
@@ -26,6 +28,11 @@ public class DataModule {
     @Provides
     public MessageRepository provideMessageRepository() {
         return new MessageRepositoryImpl();
+    }
+
+    @Provides
+    public ImageLoader provideImageLoader() {
+        return new PicassoImageLoader();
     }
 
 }
