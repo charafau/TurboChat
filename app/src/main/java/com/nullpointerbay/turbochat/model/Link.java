@@ -1,17 +1,26 @@
 package com.nullpointerbay.turbochat.model;
 
-/**
- * Created by charafau on 2017/02/10.
- */
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Link {
+import paperparcel.PaperParcel;
 
-    private String url;
-    private String title;
+@PaperParcel
+public class Link implements Parcelable {
+
+    public static final Creator<Link> CREATOR = PaperParcelLink.CREATOR;
+
+    String url;
+    String title;
 
     public Link(String url, String title) {
         this.url = url;
         this.title = title;
+    }
+
+    protected Link(Parcel in) {
+        url = in.readString();
+        title = in.readString();
     }
 
     public String getUrl() {
@@ -47,5 +56,15 @@ public class Link {
                 "url='" + url + '\'' +
                 ", title='" + title + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int flags) {
+        PaperParcelLink.writeToParcel(this, parcel, flags);
     }
 }

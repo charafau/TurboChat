@@ -42,6 +42,7 @@ ext {
     retrofitCoverterVersion = '1.0.0'
     timberVersion = '4.5.1'
     butterknifeVersion = '8.5.1'
+    paperparcelVersion = '2.0.0'
 
     //unit testing
     junitVersion = '4.12'

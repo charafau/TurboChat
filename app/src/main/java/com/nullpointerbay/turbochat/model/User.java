@@ -1,15 +1,29 @@
 package com.nullpointerbay.turbochat.model;
 
-public class User {
+import android.os.Parcel;
+import android.os.Parcelable;
 
-    private long id;
-    private String nick;
-    private String name;
+import paperparcel.PaperParcel;
+
+@PaperParcel
+public class User implements Parcelable{
+
+    public static final Creator<User> CREATOR = PaperParcelUser.CREATOR;
+
+    long id;
+    String nick;
+    String name;
 
     public User(long id, String nick, String name) {
         this.id = id;
         this.nick = nick;
         this.name = name;
+    }
+
+    protected User(Parcel in) {
+        id = in.readLong();
+        nick = in.readString();
+        name = in.readString();
     }
 
     public long getId() {
@@ -47,5 +61,15 @@ public class User {
                 ", nick='" + nick + '\'' +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int flags) {
+        PaperParcelUser.writeToParcel(this, parcel, flags);
     }
 }

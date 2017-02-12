@@ -28,7 +28,6 @@ public class MainActivity extends BaseActivity {
     }
 
     private void inflateFragment() {
-
         if (teamFragment == null) {
             teamFragment = TeamFragment.createInstance();
             final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

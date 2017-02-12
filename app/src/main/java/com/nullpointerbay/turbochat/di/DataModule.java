@@ -1,5 +1,7 @@
 package com.nullpointerbay.turbochat.di;
 
+import com.nullpointerbay.turbochat.repository.MessageRepository;
+import com.nullpointerbay.turbochat.repository.MessageRepositoryImpl;
 import com.nullpointerbay.turbochat.repository.TeamRepository;
 import com.nullpointerbay.turbochat.repository.TeamRepositoryImpl;
 import com.nullpointerbay.turbochat.utils.UserResolver;
@@ -19,6 +21,11 @@ public class DataModule {
     @Provides
     public TeamRepository provideTeamRepository() {
         return new TeamRepositoryImpl();
+    }
+
+    @Provides
+    public MessageRepository provideMessageRepository() {
+        return new MessageRepositoryImpl();
     }
 
 }

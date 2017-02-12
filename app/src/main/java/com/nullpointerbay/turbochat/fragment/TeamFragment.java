@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nullpointerbay.turbochat.R;
+import com.nullpointerbay.turbochat.activity.MessageActivity;
 import com.nullpointerbay.turbochat.base.BaseFragment;
 import com.nullpointerbay.turbochat.di.DaggerViewComponent;
 import com.nullpointerbay.turbochat.di.TurboChatComponent;
@@ -84,7 +85,7 @@ public class TeamFragment extends BaseFragment {
 //        txtMessage.setMovementMethod(LinkMovementMethod.getInstance());
 
         adapter.getPositionClick()
-                .subscribe(team -> Timber.d("clicked %s", team.toString()));
+                .subscribe(team -> MessageActivity.start(getContext(), team));
 
         return view;
     }

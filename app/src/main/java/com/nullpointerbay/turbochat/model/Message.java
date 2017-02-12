@@ -1,18 +1,22 @@
 package com.nullpointerbay.turbochat.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
-/**
- * Created by charafau on 2017/02/10.
- */
+import paperparcel.PaperParcel;
 
-public class Message {
+@PaperParcel
+public class Message implements Parcelable {
 
-    private long id;
-    private String text;
-    private List<String> mentions;
-    private List<String> emoticons;
-    private List<Link> links;
+    public static final Creator<Message> CREATOR = PaperParcelMessage.CREATOR;
+
+    long id;
+    String text;
+    List<String> mentions;
+    List<String> emoticons;
+    List<Link> links;
 
     public Message(long id, String text, List<String> mentions, List<String> emoticons, List<Link> links) {
         this.id = id;
@@ -27,6 +31,13 @@ public class Message {
         this.mentions = mentions;
         this.emoticons = emoticons;
         this.links = links;
+    }
+
+    protected Message(Parcel in) {
+        id = in.readLong();
+        text = in.readString();
+        mentions = in.createStringArrayList();
+        emoticons = in.createStringArrayList();
     }
 
     public String getText() {
@@ -68,5 +79,15 @@ public class Message {
         result = 31 * result + (emoticons != null ? emoticons.hashCode() : 0);
         result = 31 * result + (links != null ? links.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int flags) {
+        PaperParcelMessage.writeToParcel(this, parcel, flags);
     }
 }

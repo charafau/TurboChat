@@ -1,18 +1,33 @@
 package com.nullpointerbay.turbochat.model;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
-public class Team {
-    private String uuid;
-    private String name;
-    private String photoUrl;
-    private List<User> teamUsers;
+import paperparcel.PaperParcel;
+
+@PaperParcel
+public class Team implements Parcelable {
+    public static final Creator<Team> CREATOR = PaperParcelTeam.CREATOR;
+
+    String uuid;
+    String name;
+    String photoUrl;
+    List<User> teamUsers;
 
     public Team(String uuid, String name, String photoUrl) {
         this.uuid = uuid;
         this.name = name;
         this.photoUrl = photoUrl;
+    }
+
+    protected Team(Parcel in) {
+        uuid = in.readString();
+        name = in.readString();
+        photoUrl = in.readString();
+        teamUsers = in.createTypedArrayList(User.CREATOR);
     }
 
     public String getUuid() {
@@ -50,5 +65,15 @@ public class Team {
                 ", name='" + name + '\'' +
                 ", photoUrl='" + photoUrl + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int flags) {
+        PaperParcelTeam.writeToParcel(this, parcel, flags);
     }
 }
