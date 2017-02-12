@@ -29,8 +29,10 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 import timber.log.Timber;
 
 public class TeamFragment extends BaseFragment {
@@ -81,6 +83,8 @@ public class TeamFragment extends BaseFragment {
 //        txtMessage.setText(spannableString);
 //        txtMessage.setMovementMethod(LinkMovementMethod.getInstance());
 
+        adapter.getPositionClick()
+                .subscribe(team -> Timber.d("clicked %s", team.toString()));
 
         return view;
     }
@@ -111,6 +115,7 @@ public class TeamFragment extends BaseFragment {
 
     private class TeamAdapter extends RecyclerView.Adapter<TeamViewHolder> {
 
+        private final PublishSubject<Team> onClickSubject = PublishSubject.create();
         private List<Team> items;
         private Context context;
 
@@ -132,7 +137,12 @@ public class TeamFragment extends BaseFragment {
             int resourceId = resources.getIdentifier(team.getPhotoUrl(), "drawable", context.getPackageName());
 
             holder.imgGroup.setImageResource(resourceId);
+            holder.itemView.setOnClickListener(view -> onClickSubject.onNext(team));
 
+        }
+
+        public Observable<Team> getPositionClick() {
+            return onClickSubject;
         }
 
         @Override

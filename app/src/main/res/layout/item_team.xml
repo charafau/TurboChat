@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/margin_small"
     android:layout_marginRight="@dimen/margin_small"
-    android:layout_marginTop="@dimen/margin_small">
+    android:layout_marginTop="@dimen/margin_small"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
