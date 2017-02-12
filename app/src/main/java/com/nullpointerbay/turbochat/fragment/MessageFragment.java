@@ -131,7 +131,7 @@ public class MessageFragment extends BaseFragment {
             final Message message = messages.get(position);
             final SpannableString spannableString = new SpannableString(message.getText());
             final EmojiParser emoji = new EmojiParser(context, message.getEmoticons(), "emoji",
-                    (int) (-holder.txtMessage.getPaint().ascent()));
+                    (int) ( holder.txtMessage.getPaint().getTextSize()));
             emoji.insert(spannableString);
             linkParser.insert(spannableString);
             mentionParser.insert(spannableString);
