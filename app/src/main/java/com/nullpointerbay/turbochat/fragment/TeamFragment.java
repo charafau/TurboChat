@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class TeamFragment extends BaseFragment {
 
@@ -46,8 +49,6 @@ public class TeamFragment extends BaseFragment {
         final View view = inflater.inflate(R.layout.fragment_team, container, false);
         ButterKnife.bind(this, view);
 
-        teamViewModel.test();
-
         String message = "Good morning! (megusta) (coffee) here is" +
                 " some link\n https://www.youtube.com/watch?v=7Ky6ZaodBkU&t=2473s \nshould " +
                 "be highlighted and @alex is nice";
@@ -58,13 +59,22 @@ public class TeamFragment extends BaseFragment {
         emojiList.add("coffee");
         final SpannableString spannableString = new SpannableString(message);
 
-        final EmojiParser emojiParser = new EmojiParser(getContext(), emojiList, "emoji",(int) (-txtMessage.getPaint().ascent()));
+        final EmojiParser emojiParser = new EmojiParser(getContext(), emojiList, "emoji", (int) (-txtMessage.getPaint().ascent()));
         final LinkParser linkParser = new LinkParser(getContext());
         final MentionParser mentionParser = new MentionParser(getContext());
         emojiParser.insert(spannableString);
         linkParser.insert(spannableString);
         mentionParser.insert(spannableString);
 
+        teamViewModel.getTeams()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        teams -> {
+                            Log.d(TAG, "got teams " + teams.toString());
+                        },
+                        throwable -> Log.e(TAG, "" + throwable.getMessage())
+                );
 
 
         txtMessage.setText(spannableString);

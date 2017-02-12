@@ -3,6 +3,8 @@ package com.nullpointerbay.turbochat.di;
 import android.content.Context;
 
 import com.nullpointerbay.turbochat.TurboChatBaseApplication;
+import com.nullpointerbay.turbochat.repository.TeamRepository;
+import com.nullpointerbay.turbochat.utils.UserResolver;
 
 import javax.inject.Singleton;
 
@@ -16,5 +18,9 @@ public interface TurboChatComponent {
     void inject(TurboChatBaseApplication application);
 
     Context getContext();
+
+    TeamRepository getTeamRepository();
+
+    UserResolver getUserResolver();
 
 }

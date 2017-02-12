@@ -1,6 +1,6 @@
 package com.nullpointerbay.turbochat;
 
-import com.nullpointerbay.turbochat.di.DaggerTurboChatComponent;
+import com.nullpointerbay.turbochat.di.DaggerTestTurboChatComponent;
 import com.nullpointerbay.turbochat.di.TurboChatModule;
 
 public class TurboChatApplication extends TurboChatBaseApplication {
@@ -12,7 +12,7 @@ public class TurboChatApplication extends TurboChatBaseApplication {
 
     @Override
     protected void setupDagger() {
-        turboChatComponent = DaggerTurboChatComponent.builder()
+        turboChatComponent = DaggerTestTurboChatComponent.builder()
                 .turboChatModule(new TurboChatModule(this))
                 .build();
         turboChatComponent.inject(this);
