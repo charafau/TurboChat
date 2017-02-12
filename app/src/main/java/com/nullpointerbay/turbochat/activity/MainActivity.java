@@ -2,6 +2,7 @@ package com.nullpointerbay.turbochat.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 
 import com.nullpointerbay.turbochat.R;
@@ -25,6 +26,9 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         inflateFragment();
+        final ActionBar supportActionBar = getSupportActionBar();
+        supportActionBar.setTitle(R.string.app_name);
+        supportActionBar.setSubtitle(R.string.activity_teams);
     }
 
     private void inflateFragment() {
