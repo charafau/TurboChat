@@ -12,11 +12,12 @@
         android:roundIcon="@drawable/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".activity.MainActivity"
-            android:label="@string/activity_teams" />
+
+        <activity android:name=".activity.MainActivity" />
 
         <activity android:name=".activity.MessageActivity" />
+
+        <activity android:name=".activity.ProfileActivity" />
 
         <activity
             android:name=".activity.SplashActivity"

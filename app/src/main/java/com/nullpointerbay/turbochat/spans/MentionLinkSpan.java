@@ -4,6 +4,8 @@ import android.content.Context;
 import android.text.style.ClickableSpan;
 import android.view.View;
 
+import com.nullpointerbay.turbochat.activity.ProfileActivity;
+
 /**
  * Created by charafau on 2017/02/12.
  */
@@ -21,6 +23,6 @@ public class MentionLinkSpan extends ClickableSpan {
 
     @Override
     public void onClick(View view) {
-        //TODO: open profile activity
+        ProfileActivity.start(context, mentionUser);
     }
 }
