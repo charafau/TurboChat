@@ -11,24 +11,22 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EmojiParser {
+public class EmojiParser implements ItemParser {
 
     public static final String EMOJI_TYPE = "drawable";
     private final Context context;
     private final List<String> emojiList;
     private final String emojiResourcePrefix;
+    private final int textSize;
 
-    public EmojiParser(Context context, List<String> emojiList, String emojiResourcePrefix) {
+    public EmojiParser(Context context, List<String> emojiList, String emojiResourcePrefix, int textSize) {
         this.context = context;
         this.emojiList = emojiList;
         this.emojiResourcePrefix = emojiResourcePrefix;
+        this.textSize = textSize;
     }
 
-    public SpannableString insertEmoji(String message, int textSize) {
-
-
-        SpannableString spannableString = new SpannableString(message);
-
+    public void insert(SpannableString message) {
 
         for (String emoji : emojiList) {
             Pattern pattern = Pattern.compile(String.format("\\(%s\\)", emoji));
@@ -44,12 +42,10 @@ public class EmojiParser {
                     bitmap.recycle();
                 }
                 ImageSpan span = new ImageSpan(context, emojiBitmap, ImageSpan.ALIGN_BASELINE);
-                spannableString.setSpan(span, matcher.start(), matcher.end(), 0);
+                message.setSpan(span, matcher.start(), matcher.end(), 0);
             }
         }
 
-
-        return spannableString;
     }
 
 }

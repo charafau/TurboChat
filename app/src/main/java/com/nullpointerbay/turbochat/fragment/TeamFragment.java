@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +15,12 @@ import com.nullpointerbay.turbochat.di.DaggerViewComponent;
 import com.nullpointerbay.turbochat.di.TurboChatComponent;
 import com.nullpointerbay.turbochat.di.ViewModule;
 import com.nullpointerbay.turbochat.parsers.EmojiParser;
-import com.nullpointerbay.turbochat.spans.CustomLinkSpan;
+import com.nullpointerbay.turbochat.parsers.LinkParser;
+import com.nullpointerbay.turbochat.parsers.MentionParser;
 import com.nullpointerbay.turbochat.viewmodel.TeamViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
@@ -58,13 +56,15 @@ public class TeamFragment extends BaseFragment {
         emojiList.add("megusta");
         emojiList.add("dummy");
         emojiList.add("coffee");
+        final SpannableString spannableString = new SpannableString(message);
 
-        final EmojiParser emoji = new EmojiParser(getContext(), emojiList, "emoji");
+        final EmojiParser emojiParser = new EmojiParser(getContext(), emojiList, "emoji",(int) (-txtMessage.getPaint().ascent()));
+        final LinkParser linkParser = new LinkParser(getContext());
+        final MentionParser mentionParser = new MentionParser(getContext());
+        emojiParser.insert(spannableString);
+        linkParser.insert(spannableString);
+        mentionParser.insert(spannableString);
 
-        SpannableString spannableString = emoji.insertEmoji(message, (int) (-txtMessage.getPaint().ascent()));
-
-        insertLinks(spannableString);
-        insertMentions(spannableString);
 
 
         txtMessage.setText(spannableString);
@@ -72,25 +72,6 @@ public class TeamFragment extends BaseFragment {
 
 
         return view;
-    }
-
-    private void insertLinks(SpannableString spannableString) {
-
-        final Pattern pattern = Patterns.WEB_URL;
-        final Matcher matcher = pattern.matcher(spannableString);
-        while (matcher.find()) {
-            final CustomLinkSpan customLinkSpan = new CustomLinkSpan(getContext(), "http://www.dug.net.pl");
-            spannableString.setSpan(customLinkSpan, matcher.start(), matcher.end(), 0);
-        }
-    }
-
-    private void insertMentions(SpannableString spannableString) {
-        Pattern pattern = Pattern.compile("@([A-Za-z0-9_-]+)");
-        final Matcher matcher = pattern.matcher(spannableString);
-        while (matcher.find()) {
-            final CustomLinkSpan customLinkSpan = new CustomLinkSpan(getContext(), "http://www.dug.net.pl");
-            spannableString.setSpan(customLinkSpan, matcher.start(), matcher.end(), 0);
-        }
     }
 
     @Override

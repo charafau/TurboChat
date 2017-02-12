@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -24,8 +23,8 @@ public class CustomLinkSpan extends ClickableSpan {
 
     @Override
     public void onClick(View view) {
-        Log.d("gowno", "click");
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
+        //TODO: open webbrowser activity
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         context.startActivity(browserIntent);
     }
 }
