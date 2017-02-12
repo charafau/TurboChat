@@ -13,17 +13,20 @@ public class User implements Parcelable{
     long id;
     String nick;
     String name;
+    String avatarUrl;
 
-    public User(long id, String nick, String name) {
+    public User(long id, String nick, String name, String avatarUrl) {
         this.id = id;
         this.nick = nick;
         this.name = name;
+        this.avatarUrl = avatarUrl;
     }
 
     protected User(Parcel in) {
         id = in.readLong();
         nick = in.readString();
         name = in.readString();
+        avatarUrl = in.readString();
     }
 
     public long getId() {
@@ -36,6 +39,10 @@ public class User implements Parcelable{
 
     public String getName() {
         return name;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -70,7 +71,7 @@ public class MessageFragment extends BaseFragment {
         team = getArguments().getParcelable(ARG_TEAM);
         recyclerMessages.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerMessages.setHasFixedSize(true);
-        adapter = new MessageAdapter(new ArrayList<>());
+        adapter = new MessageAdapter(new ArrayList<>(), imageLoader);
         recyclerMessages.setAdapter(adapter);
 
 
@@ -104,14 +105,16 @@ public class MessageFragment extends BaseFragment {
 
     private class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
+        private final ImageLoader imageLoader;
         private List<Message> messages;
         private Context context;
         private LinkParser linkParser;
         private MentionParser mentionParser;
 
-        public MessageAdapter(List<Message> messages) {
+        public MessageAdapter(List<Message> messages, ImageLoader imageLoader) {
             this.messages = messages;
 
+            this.imageLoader = imageLoader;
         }
 
         @Override
@@ -134,6 +137,8 @@ public class MessageFragment extends BaseFragment {
             mentionParser.insert(spannableString);
             holder.txtMessage.setText(spannableString);
             holder.txtMessage.setMovementMethod(LinkMovementMethod.getInstance());
+            imageLoader.loadImage(context, message.getUser().getAvatarUrl(), holder.imgAvatar);
+            holder.txtUser.setText(message.getUser().getName());
         }
 
         @Override
@@ -149,6 +154,10 @@ public class MessageFragment extends BaseFragment {
 
     class MessageViewHolder extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.img_avatar)
+        ImageView imgAvatar;
+        @BindView(R.id.txt_user)
+        TextView txtUser;
         @BindView(R.id.txt_message)
         TextView txtMessage;
 

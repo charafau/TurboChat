@@ -9,6 +9,6 @@ import com.nullpointerbay.turbochat.model.User;
 public class UserResolverImpl implements UserResolver {
     @Override
     public User getLoggedInUser() {
-        return new User(1L, "bob", "Bob Kanode");
+        return new User(1L, "bruon", "Bruno Kanode", "u_bruno");
     }
 }

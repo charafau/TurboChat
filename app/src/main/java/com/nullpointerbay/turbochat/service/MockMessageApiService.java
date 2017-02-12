@@ -29,7 +29,7 @@ public class MockMessageApiService implements MessageApiService {
         final List<Message> messages = Arrays.asList(
                 new Message(1L, message, Arrays.asList("alex"), Arrays.asList("megusta", "coffee"),
                         Arrays.asList(new Link("https://www.youtube.com/watch?v=7Ky6ZaodBkU&t=2473s", "YouTube")),
-                        new User(1L, "alex", "Alex Smith"))
+                        new User(1L, "alex", "Alex Smith", "u_alex"))
         );
         return delegate.returningResponse(messages).getMessages();
     }

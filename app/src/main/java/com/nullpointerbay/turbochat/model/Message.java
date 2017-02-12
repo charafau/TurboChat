@@ -36,13 +36,6 @@ public class Message implements Parcelable {
         this.user = user;
     }
 
-    protected Message(Parcel in) {
-        id = in.readLong();
-        text = in.readString();
-        mentions = in.createStringArrayList();
-        emoticons = in.createStringArrayList();
-    }
-
     public String getText() {
         return text;
     }
@@ -73,6 +66,14 @@ public class Message implements Parcelable {
             return false;
         return links != null ? links.equals(message.links) : message.links == null;
 
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     @Override

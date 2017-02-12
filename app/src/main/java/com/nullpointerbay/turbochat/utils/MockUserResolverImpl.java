@@ -9,6 +9,6 @@ import com.nullpointerbay.turbochat.model.User;
 public class MockUserResolverImpl implements UserResolver {
     @Override
     public User getLoggedInUser() {
-        return new User(1L, "alex", "Alex Smith");
+        return new User(1L, "alex", "Alex Smith", "u_alex");
     }
 }
