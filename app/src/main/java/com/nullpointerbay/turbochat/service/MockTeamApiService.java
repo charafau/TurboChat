@@ -24,9 +24,9 @@ public class MockTeamApiService implements TeamApiService {
     @Override
     public Single<List<Team>> getTeams() {
         final List<Team> teams = Arrays.asList(
-                new Team(UUID.randomUUID().toString(), "Java developer team", ""),
-                new Team(UUID.randomUUID().toString(), "Android developer team", ""),
-                new Team(UUID.randomUUID().toString(), "Kotlin developer team", "")
+                new Team(UUID.randomUUID().toString(), "Java developer team", "group_java"),
+                new Team(UUID.randomUUID().toString(), "Android developer team", "group_android"),
+                new Team(UUID.randomUUID().toString(), "Kotlin developer team", "group_kotlin")
         );
 
         return delegate.returningResponse(teams).getTeams();
