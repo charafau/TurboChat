@@ -4,7 +4,7 @@ import android.content.Context;
 import android.text.SpannableString;
 import android.util.Patterns;
 
-import com.nullpointerbay.turbochat.spans.MentionLinkSpan;
+import com.nullpointerbay.turbochat.spans.CustomLinkSpan;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,8 +27,8 @@ public class LinkParser implements ItemParser {
         final Pattern pattern = Patterns.WEB_URL;
         final Matcher matcher = pattern.matcher(message);
         while (matcher.find()) {
-            final MentionLinkSpan mentionLinkSpan = new MentionLinkSpan(context, matcher.group());
-            message.setSpan(mentionLinkSpan, matcher.start(), matcher.end(), 0);
+            final CustomLinkSpan customLinkSpan = new CustomLinkSpan(context, matcher.group());
+            message.setSpan(customLinkSpan, matcher.start(), matcher.end(), 0);
         }
     }
 }

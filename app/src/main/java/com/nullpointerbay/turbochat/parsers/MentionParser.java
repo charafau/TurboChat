@@ -3,7 +3,7 @@ package com.nullpointerbay.turbochat.parsers;
 import android.content.Context;
 import android.text.SpannableString;
 
-import com.nullpointerbay.turbochat.spans.CustomLinkSpan;
+import com.nullpointerbay.turbochat.spans.MentionLinkSpan;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,8 +25,8 @@ public class MentionParser implements ItemParser {
         Pattern pattern = Pattern.compile("@([A-Za-z0-9_-]+)");
         final Matcher matcher = pattern.matcher(message);
         while (matcher.find()) {
-            final CustomLinkSpan customLinkSpan = new CustomLinkSpan(context, "http://www.dug.net.pl");
-            message.setSpan(customLinkSpan, matcher.start(), matcher.end(), 0);
+            final MentionLinkSpan mentionLinkSpan = new MentionLinkSpan(context, matcher.group());
+            message.setSpan(mentionLinkSpan, matcher.start(), matcher.end(), 0);
         }
     }
 }

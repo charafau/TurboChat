@@ -1,10 +1,10 @@
 package com.nullpointerbay.turbochat.spans;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.text.style.ClickableSpan;
 import android.view.View;
+
+import com.nullpointerbay.turbochat.activity.WebViewActivity;
 
 /**
  * Created by charafau on 2017/02/12.
@@ -23,8 +23,6 @@ public class CustomLinkSpan extends ClickableSpan {
 
     @Override
     public void onClick(View view) {
-        //TODO: open webbrowser activity
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        context.startActivity(browserIntent);
+        WebViewActivity.start(context, url);
     }
 }
