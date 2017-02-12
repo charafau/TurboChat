@@ -2,4 +2,5 @@
     <string name="app_name">Turbo Chat</string>
     <string name="activity_teams">Teams</string>
     <string name="team_error_fetch">Cannot fetch teams</string>
+    <string name="messages_subtitle">Messages</string>
 </resources>

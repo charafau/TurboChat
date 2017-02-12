@@ -1,9 +1,12 @@
 package com.nullpointerbay.turbochat.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +20,9 @@ import com.nullpointerbay.turbochat.di.TurboChatComponent;
 import com.nullpointerbay.turbochat.di.ViewModule;
 import com.nullpointerbay.turbochat.model.Message;
 import com.nullpointerbay.turbochat.model.Team;
+import com.nullpointerbay.turbochat.parsers.EmojiParser;
+import com.nullpointerbay.turbochat.parsers.LinkParser;
+import com.nullpointerbay.turbochat.parsers.MentionParser;
 import com.nullpointerbay.turbochat.utils.ImageLoader;
 import com.nullpointerbay.turbochat.viewmodel.MessageViewModel;
 
@@ -30,10 +36,6 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
-
-/**
- * Created by charafau on 2017/02/12.
- */
 
 public class MessageFragment extends BaseFragment {
 
@@ -102,24 +104,36 @@ public class MessageFragment extends BaseFragment {
 
     private class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
-
         private List<Message> messages;
+        private Context context;
+        private LinkParser linkParser;
+        private MentionParser mentionParser;
 
         public MessageAdapter(List<Message> messages) {
             this.messages = messages;
+
         }
 
         @Override
         public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new MessageViewHolder(LayoutInflater.from(parent.getContext())
+            context = parent.getContext();
+            linkParser = new LinkParser(context);
+            mentionParser = new MentionParser(context);
+            return new MessageViewHolder(LayoutInflater.from(context)
                     .inflate(R.layout.item_message, parent, false));
         }
 
         @Override
         public void onBindViewHolder(MessageViewHolder holder, int position) {
             final Message message = messages.get(position);
-            holder.txtMessage.setText(message.getText());
-
+            final SpannableString spannableString = new SpannableString(message.getText());
+            final EmojiParser emoji = new EmojiParser(context, message.getEmoticons(), "emoji",
+                    (int) (-holder.txtMessage.getPaint().ascent()));
+            emoji.insert(spannableString);
+            linkParser.insert(spannableString);
+            mentionParser.insert(spannableString);
+            holder.txtMessage.setText(spannableString);
+            holder.txtMessage.setMovementMethod(LinkMovementMethod.getInstance());
         }
 
         @Override

@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.nullpointerbay.turbochat.R;
 import com.nullpointerbay.turbochat.base.BaseActivity;
@@ -36,8 +38,23 @@ public class MessageActivity extends BaseActivity {
         setContentView(R.layout.activity_root);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        final ActionBar supportActionBar = getSupportActionBar();
         final Team team = getIntent().getExtras().getParcelable(ARG_TEAM);
+        supportActionBar.setTitle(team.getName());
+        supportActionBar.setSubtitle(getString(R.string.messages_subtitle));
+        supportActionBar.setDisplayHomeAsUpEnabled(true);
         inflateFragment(team);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void inflateFragment(Team team) {
