@@ -2,8 +2,10 @@ package com.nullpointerbay.turbochat.di;
 
 import com.nullpointerbay.turbochat.repository.MessageRepository;
 import com.nullpointerbay.turbochat.repository.MockMessageRepository;
+import com.nullpointerbay.turbochat.repository.MockUserRepository;
 import com.nullpointerbay.turbochat.repository.TeamRepository;
 import com.nullpointerbay.turbochat.repository.TeamRepositoryImpl;
+import com.nullpointerbay.turbochat.repository.UserRepository;
 import com.nullpointerbay.turbochat.utils.ImageLoader;
 import com.nullpointerbay.turbochat.utils.MockImageLoader;
 import com.nullpointerbay.turbochat.utils.MockUserResolverImpl;
@@ -33,6 +35,11 @@ public class MockDataModule {
     @Provides
     public ImageLoader provideMockImageLoader() {
         return new MockImageLoader();
+    }
+
+    @Provides
+    public UserRepository provideMockUserRepository() {
+        return new MockUserRepository();
     }
 
 }
