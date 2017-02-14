@@ -24,6 +24,10 @@ public class MockUserApiService implements UserApiService {
         final User userAlex = new User(1L, NICK_ALEX, "Alex Smith", "u_alex");
         final User userYui = new User(3L, NICK_YUI, "Yui Kanazawa", "u_yui");
 
+        if (nick.startsWith("@")) {
+            nick = nick.substring(1);
+        }
+
         User returningUser = userAlex;
 
         if (NICK_BRUNO.equals(nick)) {

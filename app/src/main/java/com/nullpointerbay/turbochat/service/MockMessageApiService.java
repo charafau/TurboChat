@@ -37,7 +37,7 @@ public class MockMessageApiService implements MessageApiService {
                         userAlex
                 ),
                 new Message(2L, "@alex I feel (awesome) when programming (android)",
-                        Arrays.asList("bruno"), Arrays.asList("android", "coffee"),
+                        Arrays.asList("bruno"), Arrays.asList("awesome", "android"),
                         new ArrayList<>(),
                         userBruno
                 ),
