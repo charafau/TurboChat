@@ -2,13 +2,17 @@ package com.nullpointerbay.turbochat.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.nullpointerbay.turbochat.R;
+import com.nullpointerbay.turbochat.base.BaseActivity;
 import com.nullpointerbay.turbochat.base.BaseFragment;
 import com.nullpointerbay.turbochat.di.DaggerViewComponent;
 import com.nullpointerbay.turbochat.di.TurboChatComponent;
@@ -39,6 +43,8 @@ public class ProfileFragment extends BaseFragment {
     TextView txtNick;
     @BindView(R.id.txt_name)
     TextView txtName;
+    @BindView(R.id.progress)
+    ProgressBar progress;
     private String userNick;
 
     public static ProfileFragment createInstance(String user) {
@@ -58,6 +64,15 @@ public class ProfileFragment extends BaseFragment {
         userNick = getArguments().getString(ARG_USER);
 
         return view;
+    }
+
+    @Override
+    public void onAttachFragment(Fragment childFragment) {
+        super.onAttachFragment(childFragment);
+        if (!(getActivity() instanceof BaseActivity)) {
+            throw new ClassCastException(getActivity().getClass().getSimpleName()
+                    + " should implement BaseActivity");
+        }
     }
 
     @Override
@@ -81,8 +96,13 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void bindUser(User user) {
+        progress.setVisibility(View.GONE);
         this.txtName.setText(getResources().getString(R.string.profile_name, user.getName()));
         this.txtNick.setText(getResources().getString(R.string.profile_nick, user.getNick()));
-        imageLoader.loadImage(getContext(), user.getAvatarUrl(), this.imgAvatar);
+        imageLoader.loadImageWithCircleTransformation(getContext(), user.getAvatarUrl(), this.imgAvatar);
+
+        final ActionBar supportActionBar = ((BaseActivity) getActivity()).getSupportActionBar();
+        supportActionBar.setTitle(user.getName());
+        supportActionBar.setSubtitle("@" + user.getNick());
     }
 }

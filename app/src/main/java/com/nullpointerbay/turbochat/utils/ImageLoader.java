@@ -11,4 +11,6 @@ public interface ImageLoader {
 
     void loadImage(Context context, String url, ImageView target);
 
+    void loadImageWithCircleTransformation(Context context, String url, ImageView target);
+
 }

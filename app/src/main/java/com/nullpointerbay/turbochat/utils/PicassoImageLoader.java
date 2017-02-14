@@ -15,4 +15,10 @@ public class PicassoImageLoader implements ImageLoader {
     public void loadImage(Context context, String url, ImageView target) {
         Picasso.with(context).load(url).into(target);
     }
+
+    @Override
+    public void loadImageWithCircleTransformation(Context context, String url, ImageView target) {
+        Picasso.with(context).load(url).transform(new CircleTransform()).into(target);
+
+    }
 }

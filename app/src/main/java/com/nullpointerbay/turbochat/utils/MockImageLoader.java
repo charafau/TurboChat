@@ -2,6 +2,8 @@ package com.nullpointerbay.turbochat.utils;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
 
@@ -16,5 +18,17 @@ public class MockImageLoader implements ImageLoader {
         Resources resources = context.getResources();
         int resourceId = resources.getIdentifier(url, "drawable", context.getPackageName());
         target.setImageResource(resourceId);
+    }
+
+    @Override
+    public void loadImageWithCircleTransformation(Context context, String url, ImageView target) {
+        Resources resources = context.getResources();
+        int resourceId = resources.getIdentifier(url, "drawable", context.getPackageName());
+
+        Bitmap bm = BitmapFactory.decodeResource(context.getResources(), resourceId);
+        final CircleTransform circleTransform = new CircleTransform();
+        final Bitmap circleBitmap = circleTransform.transform(bm);
+        target.setImageBitmap(circleBitmap);
+
     }
 }
