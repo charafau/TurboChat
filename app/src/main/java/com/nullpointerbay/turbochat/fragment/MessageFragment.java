@@ -14,6 +14,7 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -129,10 +130,25 @@ public class MessageFragment extends BaseFragment {
                         )
         );
 
+        compositeDisposable.add(
+                messageViewModel.messageStream()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                message -> {
+                                    adapter.addMessage(message);
+                                    adapter.notifyItemInserted(adapter.getItemCount() - 1);
+                                    recyclerMessages.scrollToPosition(adapter.getItemCount() - 1);
+                                },
+                                throwable -> {
+                                }
+                        )
+        );
+
         if (emojiFragment != null) {
             compositeDisposable.add(emojiFragment.getEmojiOnClick()
                     .subscribe(emojiText -> inserEmoji(emojiText))
-            )
+            );
         }
 
         final int height = frameEmojis.getHeight();
@@ -151,19 +167,20 @@ public class MessageFragment extends BaseFragment {
                             }
                         });
             }
-
-//            final User userYui = new User(3L, "yui", "Yui Kanazawa", "u_yui");
-//
-//            final Message message = new Message(id, "some message", Collections.emptyList(),
-//                    Collections.emptyList(), Collections.emptyList(), userYui);
-//            adapter.addMessage(message);
-//            adapter.notifyItemInserted(adapter.getItemCount() - 1);
-//            recyclerMessages.scrollToPosition(adapter.getItemCount() - 1);
         });
 
         editComment.setOnFocusChangeListener((view, hasFocus) -> frameEmojis.setVisibility(View.GONE));
 
         editComment.setOnClickListener(view -> frameEmojis.setVisibility(View.GONE));
+
+        editComment.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+            boolean handled = false;
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                messageViewModel.sendMessage(textView.getText().toString());
+                handled = true;
+            }
+            return handled;
+        });
     }
 
     private void inserEmoji(String emojiText) {
