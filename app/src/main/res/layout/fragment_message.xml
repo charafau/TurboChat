@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_messages"
@@ -45,8 +46,9 @@
     <FrameLayout
         android:id="@+id/frame_emojis"
         android:layout_width="0dp"
-        android:layout_height="250dp"
+        android:layout_height="180dp"
         android:layout_marginBottom="0dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintLeft_toLeftOf="parent"

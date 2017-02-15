@@ -1,8 +1,11 @@
 package com.nullpointerbay.turbochat.fragment;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
@@ -10,6 +13,7 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -24,7 +28,6 @@ import com.nullpointerbay.turbochat.di.TurboChatComponent;
 import com.nullpointerbay.turbochat.di.ViewModule;
 import com.nullpointerbay.turbochat.model.Message;
 import com.nullpointerbay.turbochat.model.Team;
-import com.nullpointerbay.turbochat.model.User;
 import com.nullpointerbay.turbochat.parsers.EmojiParser;
 import com.nullpointerbay.turbochat.parsers.LinkParser;
 import com.nullpointerbay.turbochat.parsers.MentionParser;
@@ -32,7 +35,6 @@ import com.nullpointerbay.turbochat.utils.ImageLoader;
 import com.nullpointerbay.turbochat.viewmodel.MessageViewModel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -86,6 +88,9 @@ public class MessageFragment extends BaseFragment {
         recyclerMessages.setAdapter(adapter);
 
 
+        final FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.frame_emojis, EmojiFragment.createInstance(team), EmojiFragment.TAG);
+        ft.commit();
         return view;
     }
 
@@ -114,15 +119,43 @@ public class MessageFragment extends BaseFragment {
                         )
         );
         long id = 7L;
+        final int height = frameEmojis.getHeight();
         imgEmoji.setOnClickListener(view -> {
-            final User userYui = new User(3L, "yui", "Yui Kanazawa", "u_yui");
+            hideKeyboard(view);
+            if (frameEmojis.getVisibility() == View.GONE) {
+                frameEmojis.animate()
+                        .translationY(-height)
+                        .alpha(0.0f)
+                        .setDuration(200)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                frameEmojis.setVisibility(View.VISIBLE);
+                            }
+                        });
+            }
 
-            final Message message = new Message(id, "some message", Collections.emptyList(),
-                    Collections.emptyList(), Collections.emptyList(), userYui);
-            adapter.addMessage(message);
-            adapter.notifyItemInserted(adapter.getItemCount() - 1);
-            recyclerMessages.scrollToPosition(adapter.getItemCount() - 1);
+//            final User userYui = new User(3L, "yui", "Yui Kanazawa", "u_yui");
+//
+//            final Message message = new Message(id, "some message", Collections.emptyList(),
+//                    Collections.emptyList(), Collections.emptyList(), userYui);
+//            adapter.addMessage(message);
+//            adapter.notifyItemInserted(adapter.getItemCount() - 1);
+//            recyclerMessages.scrollToPosition(adapter.getItemCount() - 1);
         });
+
+        editComment.setOnFocusChangeListener((view, hasFocus) -> frameEmojis.setVisibility(View.GONE));
+
+        editComment.setOnClickListener(view -> frameEmojis.setVisibility(View.GONE));
+    }
+
+    private void hideKeyboard(View view) {
+        final View v = getActivity().getCurrentFocus();
+        if (v != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     private class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {

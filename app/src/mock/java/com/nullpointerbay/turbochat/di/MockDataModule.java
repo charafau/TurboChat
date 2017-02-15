@@ -1,5 +1,9 @@
 package com.nullpointerbay.turbochat.di;
 
+import android.content.Context;
+
+import com.nullpointerbay.turbochat.repository.EmojiRepository;
+import com.nullpointerbay.turbochat.repository.EmojiRepositoryImpl;
 import com.nullpointerbay.turbochat.repository.MessageRepository;
 import com.nullpointerbay.turbochat.repository.MockMessageRepository;
 import com.nullpointerbay.turbochat.repository.MockUserRepository;
@@ -40,6 +44,11 @@ public class MockDataModule {
     @Provides
     public UserRepository provideMockUserRepository() {
         return new MockUserRepository();
+    }
+
+    @Provides
+    public EmojiRepository provideEmojiRepository(Context context) {
+        return new EmojiRepositoryImpl(context);
     }
 
 }

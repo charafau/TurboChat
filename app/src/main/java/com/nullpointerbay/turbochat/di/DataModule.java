@@ -1,5 +1,9 @@
 package com.nullpointerbay.turbochat.di;
 
+import android.content.Context;
+
+import com.nullpointerbay.turbochat.repository.EmojiRepository;
+import com.nullpointerbay.turbochat.repository.EmojiRepositoryImpl;
 import com.nullpointerbay.turbochat.repository.MessageRepository;
 import com.nullpointerbay.turbochat.repository.MessageRepositoryImpl;
 import com.nullpointerbay.turbochat.repository.TeamRepository;
@@ -40,6 +44,11 @@ public class DataModule {
     @Provides
     public UserRepository provideUserRepository(){
         return new UserRepositoryImpl();
+    }
+
+    @Provides
+    public EmojiRepository provideEmojiRepository(Context context) {
+        return new EmojiRepositoryImpl(context);
     }
 
 }
