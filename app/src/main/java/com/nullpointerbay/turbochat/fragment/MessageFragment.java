@@ -10,6 +10,9 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,6 +24,7 @@ import com.nullpointerbay.turbochat.di.TurboChatComponent;
 import com.nullpointerbay.turbochat.di.ViewModule;
 import com.nullpointerbay.turbochat.model.Message;
 import com.nullpointerbay.turbochat.model.Team;
+import com.nullpointerbay.turbochat.model.User;
 import com.nullpointerbay.turbochat.parsers.EmojiParser;
 import com.nullpointerbay.turbochat.parsers.LinkParser;
 import com.nullpointerbay.turbochat.parsers.MentionParser;
@@ -28,6 +32,7 @@ import com.nullpointerbay.turbochat.utils.ImageLoader;
 import com.nullpointerbay.turbochat.viewmodel.MessageViewModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -50,6 +55,12 @@ public class MessageFragment extends BaseFragment {
     ProgressBar progress;
     @Inject
     ImageLoader imageLoader;
+    @BindView(R.id.img_emoji)
+    ImageButton imgEmoji;
+    @BindView(R.id.frame_emojis)
+    FrameLayout frameEmojis;
+    @BindView(R.id.edit_comment)
+    EditText editComment;
     private Team team;
     private MessageAdapter adapter;
 
@@ -97,10 +108,21 @@ public class MessageFragment extends BaseFragment {
                                 messages -> {
                                     progress.setVisibility(View.GONE);
                                     adapter.addAll(messages);
+                                    recyclerMessages.scrollToPosition(adapter.getItemCount() - 1);
                                 },
                                 throwable -> Timber.e("" + throwable.getMessage())
                         )
         );
+        long id = 7L;
+        imgEmoji.setOnClickListener(view -> {
+            final User userYui = new User(3L, "yui", "Yui Kanazawa", "u_yui");
+
+            final Message message = new Message(id, "some message", Collections.emptyList(),
+                    Collections.emptyList(), Collections.emptyList(), userYui);
+            adapter.addMessage(message);
+            adapter.notifyItemInserted(adapter.getItemCount() - 1);
+            recyclerMessages.scrollToPosition(adapter.getItemCount() - 1);
+        });
     }
 
     private class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
@@ -113,7 +135,6 @@ public class MessageFragment extends BaseFragment {
 
         public MessageAdapter(List<Message> messages, ImageLoader imageLoader) {
             this.messages = messages;
-
             this.imageLoader = imageLoader;
         }
 
@@ -131,13 +152,13 @@ public class MessageFragment extends BaseFragment {
             final Message message = messages.get(position);
             final SpannableString spannableString = new SpannableString(message.getText());
             final EmojiParser emoji = new EmojiParser(context, message.getEmoticons(), "emoji",
-                    (int) ( holder.txtMessage.getPaint().getTextSize()));
+                    (int) (holder.txtMessage.getPaint().getTextSize()));
             emoji.insert(spannableString);
             linkParser.insert(spannableString);
             mentionParser.insert(spannableString);
             holder.txtMessage.setText(spannableString);
             holder.txtMessage.setMovementMethod(LinkMovementMethod.getInstance());
-            imageLoader.loadImage(context, message.getUser().getAvatarUrl(), holder.imgAvatar);
+            imageLoader.loadImageWithCircleTransformation(context, message.getUser().getAvatarUrl(), holder.imgAvatar);
             holder.txtUser.setText(message.getUser().getName());
         }
 
@@ -149,6 +170,10 @@ public class MessageFragment extends BaseFragment {
         public void addAll(List<Message> messages) {
             this.messages = messages;
             notifyDataSetChanged();
+        }
+
+        public void addMessage(Message message) {
+            messages.add(message);
         }
     }
 

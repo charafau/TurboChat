@@ -31,36 +31,29 @@ public class MockMessageApiService implements MessageApiService {
         final User userBruno = new User(2L, "bruno", "Bruno Kanode", "u_bruno");
         final User userAlex = new User(1L, "alex", "Alex Smith", "u_alex");
         final User userYui = new User(3L, "yui", "Yui Kanazawa", "u_yui");
-        final List<Message> messages = Arrays.asList(
-                new Message(1L, message, Arrays.asList("bruno"), Arrays.asList("megusta", "coffee"),
-                        Arrays.asList(new Link("https://www.youtube.com/watch?v=7Ky6ZaodBkU&t=2473s", "YouTube")),
-                        userAlex
-                ),
-                new Message(2L, "@alex I feel (awesome) when programming (android)",
-                        Arrays.asList("bruno"), Arrays.asList("awesome", "android"),
-                        new ArrayList<>(),
-                        userBruno
-                ),
-                new Message(3L, "what programming language do you like?", Collections.emptyList(), Collections.emptyList(),
-                        Collections.emptyList(),
-                        userBruno
-                ),
-                new Message(4L, "I wile like a (badass) when using functional programming", Arrays.asList("bruno"), Arrays.asList("badass"),
-                        Collections.emptyList(),
-                        userAlex
-                ),
-                new Message(5L, "(awyeah)", Collections.emptyList(), Arrays.asList("awyeah"),
-                        Collections.emptyList(),
-                        userBruno
+        final List<Message> messages = new ArrayList<>();
 
-                ),
-                new Message(5L, "I see @alex and @bruno are having fun here (notbad)", Arrays.asList("alex", "bruno"),
-                        Arrays.asList("notbad"),
-                        Collections.emptyList(),
-                        userYui
+        messages.add(new Message(1L, message, Arrays.asList("bruno"), Arrays.asList("megusta", "coffee"),
+                Arrays.asList(new Link("https://www.youtube.com/watch?v=7Ky6ZaodBkU&t=2473s", "YouTube")),
+                userAlex));
+        messages.add(new Message(2L, "@alex I feel (awesome) when programming (android)",
+                Arrays.asList("bruno"), Arrays.asList("awesome", "android"),
+                new ArrayList<>(),
+                userBruno));
+        messages.add(new Message(3L, "what programming language do you like?", Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(),
+                userBruno));
+        messages.add(new Message(4L, "I wile like a (badass) when using functional programming", Arrays.asList("bruno"), Arrays.asList("badass"),
+                Collections.emptyList(),
+                userAlex));
+        messages.add(new Message(5L, "(awyeah)", Collections.emptyList(), Arrays.asList("awyeah"),
+                Collections.emptyList(),
+                userBruno));
+        messages.add(new Message(6L, "I see @alex and @bruno are having fun here (notbad)", Arrays.asList("alex", "bruno"),
+                Arrays.asList("notbad"),
+                Collections.emptyList(),
+                userYui));
 
-                )
-        );
         return delegate.returningResponse(messages).getMessages();
     }
 }
