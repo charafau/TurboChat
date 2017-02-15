@@ -3,7 +3,6 @@ package com.nullpointerbay.turbochat.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,8 +26,10 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 
 /**
  * Created by charafau on 2017/02/15.
@@ -49,7 +50,7 @@ public class EmojiFragment extends BaseFragment {
     private Team team;
 
 
-    public static Fragment createInstance(Team team) {
+    public static EmojiFragment createInstance(Team team) {
         final Bundle args = new Bundle();
         args.putParcelable(ARG_TEAM, team);
         final EmojiFragment emojiFragment = new EmojiFragment();
@@ -96,7 +97,13 @@ public class EmojiFragment extends BaseFragment {
         );
     }
 
+    public Observable<String> getEmojiOnClick() {
+        return adapter.getPositionClick();
+    }
+
     private class EmojiAdapter extends RecyclerView.Adapter<EmojiViewHolder> {
+        public static final String EMOJI_PREFIX = "emoji_%s";
+        private final PublishSubject<String> onClickSubject = PublishSubject.create();
         private List<String> emojiList;
         private Context context;
 
@@ -117,7 +124,12 @@ public class EmojiFragment extends BaseFragment {
         @Override
         public void onBindViewHolder(EmojiViewHolder holder, int position) {
             final String emojiUrl = emojiList.get(position);
-            imageLoader.loadImage(context, emojiUrl, holder.imgEmoji);
+            imageLoader.loadImage(context, String.format(EMOJI_PREFIX, emojiUrl), holder.imgEmoji);
+            holder.itemView.setOnClickListener(view -> onClickSubject.onNext(emojiUrl));
+        }
+
+        public Observable<String> getPositionClick() {
+            return onClickSubject;
         }
 
         @Override

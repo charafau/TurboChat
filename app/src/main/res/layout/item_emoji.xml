@@ -3,5 +3,6 @@
     android:id="@+id/img_emoji"
     android:layout_width="@dimen/emoji_select_size"
     android:layout_height="@dimen/emoji_select_size"
-    android:layout_marginLeft="4dp"
-    android:layout_marginRight="4dp" />
+    android:foreground="?android:attr/selectableItemBackground"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp" />

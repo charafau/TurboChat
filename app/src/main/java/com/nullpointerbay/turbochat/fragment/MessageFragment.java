@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
@@ -65,6 +66,7 @@ public class MessageFragment extends BaseFragment {
     EditText editComment;
     private Team team;
     private MessageAdapter adapter;
+    private EmojiFragment emojiFragment;
 
     public static MessageFragment createInstance(Team team) {
         final Bundle bundle = new Bundle();
@@ -82,16 +84,24 @@ public class MessageFragment extends BaseFragment {
 
 
         team = getArguments().getParcelable(ARG_TEAM);
+        initMessagesRecyclerView();
+        inflateEmojiFragment();
+
+        return view;
+    }
+
+    private void initMessagesRecyclerView() {
         recyclerMessages.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerMessages.setHasFixedSize(true);
         adapter = new MessageAdapter(new ArrayList<>(), imageLoader);
         recyclerMessages.setAdapter(adapter);
+    }
 
-
+    private void inflateEmojiFragment() {
         final FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.frame_emojis, EmojiFragment.createInstance(team), EmojiFragment.TAG);
+        emojiFragment = EmojiFragment.createInstance(team);
+        ft.replace(R.id.frame_emojis, emojiFragment, EmojiFragment.TAG);
         ft.commit();
-        return view;
     }
 
     @Override
@@ -118,7 +128,13 @@ public class MessageFragment extends BaseFragment {
                                 throwable -> Timber.e("" + throwable.getMessage())
                         )
         );
-        long id = 7L;
+
+        if (emojiFragment != null) {
+            compositeDisposable.add(emojiFragment.getEmojiOnClick()
+                    .subscribe(emojiText -> inserEmoji(emojiText))
+            )
+        }
+
         final int height = frameEmojis.getHeight();
         imgEmoji.setOnClickListener(view -> {
             hideKeyboard(view);
@@ -126,7 +142,7 @@ public class MessageFragment extends BaseFragment {
                 frameEmojis.animate()
                         .translationY(-height)
                         .alpha(0.0f)
-                        .setDuration(200)
+                        .setDuration(150)
                         .setListener(new AnimatorListenerAdapter() {
                             @Override
                             public void onAnimationEnd(Animator animation) {
@@ -148,6 +164,15 @@ public class MessageFragment extends BaseFragment {
         editComment.setOnFocusChangeListener((view, hasFocus) -> frameEmojis.setVisibility(View.GONE));
 
         editComment.setOnClickListener(view -> frameEmojis.setVisibility(View.GONE));
+    }
+
+    private void inserEmoji(String emojiText) {
+        String insertEmoji = String.format(" (%s) ", emojiText);
+        final int selectionStart = editComment.getSelectionStart();
+        final Editable text = editComment.getText();
+        final Editable insertedText = text.insert(selectionStart, insertEmoji);
+        editComment.setText(insertedText);
+        editComment.setSelection(editComment.length());
     }
 
     private void hideKeyboard(View view) {
