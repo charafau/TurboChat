@@ -1,6 +1,7 @@
 package com.nullpointerbay.turbochat.parsers;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.SpannableString;
 
 import com.nullpointerbay.turbochat.spans.MentionLinkSpan;
@@ -20,10 +21,15 @@ public class MentionParser implements ItemParser {
         this.context = context;
     }
 
+    @NonNull
+    public static Matcher getMatcher(String message) {
+        Pattern pattern = Pattern.compile("@([A-Za-z0-9_-]+)");
+        return pattern.matcher(message);
+    }
+
     @Override
     public void insert(SpannableString message) {
-        Pattern pattern = Pattern.compile("@([A-Za-z0-9_-]+)");
-        final Matcher matcher = pattern.matcher(message);
+        final Matcher matcher = getMatcher(message.toString());
         while (matcher.find()) {
             final MentionLinkSpan mentionLinkSpan = new MentionLinkSpan(context, matcher.group());
             message.setSpan(mentionLinkSpan, matcher.start(), matcher.end(), 0);

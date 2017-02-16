@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 
@@ -26,11 +27,16 @@ public class EmojiParser implements ItemParser {
         this.textSize = textSize;
     }
 
+    @NonNull
+    public static Matcher getEmojiParser(String message, String emoji) {
+        Pattern pattern = Pattern.compile(String.format("\\(%s\\)", emoji));
+        return pattern.matcher(message);
+    }
+
     public void insert(SpannableString message) {
 
         for (String emoji : emojiList) {
-            Pattern pattern = Pattern.compile(String.format("\\(%s\\)", emoji));
-            Matcher matcher = pattern.matcher(message);
+            Matcher matcher = getEmojiParser(message.toString(), emoji);
             Bitmap emojiBitmap = null;
             while (matcher.find()) {
                 if (emojiBitmap == null) {

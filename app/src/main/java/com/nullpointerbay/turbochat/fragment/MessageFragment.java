@@ -68,6 +68,7 @@ public class MessageFragment extends BaseFragment {
     private Team team;
     private MessageAdapter adapter;
     private EmojiFragment emojiFragment;
+    private List<String> pressedEmojis = new ArrayList<>();
 
     public static MessageFragment createInstance(Team team) {
         final Bundle bundle = new Bundle();
@@ -147,7 +148,7 @@ public class MessageFragment extends BaseFragment {
 
         if (emojiFragment != null) {
             compositeDisposable.add(emojiFragment.getEmojiOnClick()
-                    .subscribe(emojiText -> inserEmoji(emojiText))
+                    .subscribe(emojiText -> insertEmoji(emojiText))
             );
         }
 
@@ -158,7 +159,7 @@ public class MessageFragment extends BaseFragment {
                 frameEmojis.animate()
                         .translationY(-height)
                         .alpha(0.0f)
-                        .setDuration(150)
+                        .setDuration(100)
                         .setListener(new AnimatorListenerAdapter() {
                             @Override
                             public void onAnimationEnd(Animator animation) {
@@ -176,14 +177,16 @@ public class MessageFragment extends BaseFragment {
         editComment.setOnEditorActionListener((textView, actionId, keyEvent) -> {
             boolean handled = false;
             if (actionId == EditorInfo.IME_ACTION_SEND) {
-                messageViewModel.sendMessage(textView.getText().toString());
+                messageViewModel.sendMessage(textView.getText().toString(), pressedEmojis);
                 handled = true;
+                editComment.setText("");
             }
             return handled;
         });
     }
 
-    private void inserEmoji(String emojiText) {
+    private void insertEmoji(String emojiText) {
+        pressedEmojis.add(emojiText);
         String insertEmoji = String.format(" (%s) ", emojiText);
         final int selectionStart = editComment.getSelectionStart();
         final Editable text = editComment.getText();

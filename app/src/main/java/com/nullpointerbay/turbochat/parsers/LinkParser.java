@@ -1,6 +1,7 @@
 package com.nullpointerbay.turbochat.parsers;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.SpannableString;
 import android.util.Patterns;
 
@@ -21,11 +22,15 @@ public class LinkParser implements ItemParser {
         this.context = context;
     }
 
+    @NonNull
+    public static Matcher getLinkParser(String message) {
+        final Pattern pattern = Patterns.WEB_URL;
+        return pattern.matcher(message);
+    }
 
     @Override
     public void insert(SpannableString message) {
-        final Pattern pattern = Patterns.WEB_URL;
-        final Matcher matcher = pattern.matcher(message);
+        final Matcher matcher = getLinkParser(message.toString());
         while (matcher.find()) {
             final CustomLinkSpan customLinkSpan = new CustomLinkSpan(context, matcher.group());
             message.setSpan(customLinkSpan, matcher.start(), matcher.end(), 0);
