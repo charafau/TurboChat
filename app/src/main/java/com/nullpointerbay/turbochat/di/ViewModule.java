@@ -1,5 +1,6 @@
 package com.nullpointerbay.turbochat.di;
 
+import com.nullpointerbay.turbochat.cache.MessageCache;
 import com.nullpointerbay.turbochat.repository.EmojiRepository;
 import com.nullpointerbay.turbochat.repository.MessageRepository;
 import com.nullpointerbay.turbochat.repository.TeamRepository;
@@ -23,8 +24,8 @@ public class ViewModule {
     }
 
     @Provides
-    public MessageViewModel provideMessageViewModel(MessageRepository messageRepository) {
-        return new MessageViewModel(messageRepository);
+    public MessageViewModel provideMessageViewModel(MessageRepository messageRepository, MessageCache messageCache) {
+        return new MessageViewModel(messageRepository, messageCache);
     }
 
     @Provides

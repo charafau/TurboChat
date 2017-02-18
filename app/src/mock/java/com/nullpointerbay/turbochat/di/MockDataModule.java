@@ -2,6 +2,8 @@ package com.nullpointerbay.turbochat.di;
 
 import android.content.Context;
 
+import com.nullpointerbay.turbochat.cache.MessageCache;
+import com.nullpointerbay.turbochat.cache.MessageCacheImpl;
 import com.nullpointerbay.turbochat.repository.EmojiRepository;
 import com.nullpointerbay.turbochat.repository.EmojiRepositoryImpl;
 import com.nullpointerbay.turbochat.repository.MessageRepository;
@@ -14,6 +16,8 @@ import com.nullpointerbay.turbochat.utils.ImageLoader;
 import com.nullpointerbay.turbochat.utils.MockImageLoader;
 import com.nullpointerbay.turbochat.utils.MockUserResolverImpl;
 import com.nullpointerbay.turbochat.utils.UserResolver;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -51,4 +55,9 @@ public class MockDataModule {
         return new EmojiRepositoryImpl(context);
     }
 
+    @Provides
+    @Singleton
+    public MessageCache provideMessageCache() {
+        return new MessageCacheImpl();
+    }
 }

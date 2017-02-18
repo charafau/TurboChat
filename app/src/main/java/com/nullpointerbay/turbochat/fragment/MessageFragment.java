@@ -123,6 +123,7 @@ public class MessageFragment extends BaseFragment {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 messages -> {
+                                    Timber.d("adding messages");
                                     progress.setVisibility(View.GONE);
                                     adapter.addAll(messages);
                                     recyclerMessages.scrollToPosition(adapter.getItemCount() - 1);
@@ -132,7 +133,7 @@ public class MessageFragment extends BaseFragment {
         );
 
         compositeDisposable.add(
-                messageViewModel.messageStream()
+                messageViewModel.localMessageStream()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
@@ -145,6 +146,14 @@ public class MessageFragment extends BaseFragment {
                                 }
                         )
         );
+
+        compositeDisposable.add(messageViewModel.apiMessageSteam()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        message -> Timber.d("bla bla %s", message.toString()),
+                        throwable -> Timber.e(throwable)
+                ));
 
         if (emojiFragment != null) {
             compositeDisposable.add(emojiFragment.getEmojiOnClick()
@@ -165,16 +174,19 @@ public class MessageFragment extends BaseFragment {
                             public void onAnimationEnd(Animator animation) {
                                 super.onAnimationEnd(animation);
                                 frameEmojis.setVisibility(View.VISIBLE);
+                                recyclerMessages.smoothScrollToPosition(recyclerMessages.getAdapter().getItemCount());
                             }
                         });
             }
+
         });
 
-        editComment.setOnFocusChangeListener((view, hasFocus) -> frameEmojis.setVisibility(View.GONE));
+        editComment.setOnFocusChangeListener((view, hasFocus) -> onOpenKeyboard());
 
-        editComment.setOnClickListener(view -> frameEmojis.setVisibility(View.GONE));
+        editComment.setOnClickListener(view -> onOpenKeyboard());
 
         editComment.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+
             boolean handled = false;
             if (actionId == EditorInfo.IME_ACTION_SEND) {
                 messageViewModel.sendMessage(textView.getText().toString(), pressedEmojis);
@@ -183,6 +195,11 @@ public class MessageFragment extends BaseFragment {
             }
             return handled;
         });
+    }
+
+    private void onOpenKeyboard() {
+        frameEmojis.setVisibility(View.GONE);
+        recyclerMessages.smoothScrollToPosition(recyclerMessages.getAdapter().getItemCount());
     }
 
     private void insertEmoji(String emojiText) {

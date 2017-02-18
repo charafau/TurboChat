@@ -2,6 +2,7 @@ package com.nullpointerbay.turbochat.viewmodel;
 
 import android.support.annotation.NonNull;
 
+import com.nullpointerbay.turbochat.cache.MessageCache;
 import com.nullpointerbay.turbochat.model.Link;
 import com.nullpointerbay.turbochat.model.Message;
 import com.nullpointerbay.turbochat.model.User;
@@ -17,7 +18,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import timber.log.Timber;
 
@@ -27,15 +28,24 @@ import static android.R.attr.id;
 public class MessageViewModel {
 
     private final MessageRepository messageRepository;
+    private final MessageCache messageCache;
 
-    PublishSubject<Message> messagePublishSubject = PublishSubject.create();
+    PublishSubject<Message> localMessageStream = PublishSubject.create();
+    PublishSubject<Message> apiMessageStream = PublishSubject.create();
 
-    public MessageViewModel(MessageRepository messageRepository) {
+
+    public MessageViewModel(MessageRepository messageRepository, MessageCache messageCache) {
         this.messageRepository = messageRepository;
+        this.messageCache = messageCache;
     }
 
-    public Single<List<Message>> getMessages() {
-        return messageRepository.getMessages();
+    public Observable<List<Message>> getMessages() {
+        final Observable<List<Message>> network = messageRepository.getMessages()
+                .doOnNext(messageCache::writeToCache);
+
+        final Observable<List<Message>> cache = messageCache.getMessages().filter(messages -> !messages.isEmpty());
+
+        return Observable.concat(cache, network);
     }
 
     public void sendMessage(String message, List<String> pressedEmojis) {
@@ -54,7 +64,12 @@ public class MessageViewModel {
         final Message m = new Message(id, message, mentions,
                 emojis, links, userYui);
 
-        messagePublishSubject.onNext(m);
+        localMessageStream.onNext(m);
+
+        messageRepository.sendMessage(m)
+                .subscribeOn(Schedulers.io())
+                .subscribe(serverMessage -> apiMessageStream.onNext(serverMessage),
+                        throwable -> apiMessageStream.onError(throwable));
 
     }
 
@@ -96,7 +111,11 @@ public class MessageViewModel {
         return mentions;
     }
 
-    public Observable<Message> messageStream() {
-        return messagePublishSubject;
+    public Observable<Message> localMessageStream() {
+        return localMessageStream;
+    }
+
+    public Observable<Message> apiMessageSteam() {
+        return apiMessageStream;
     }
 }

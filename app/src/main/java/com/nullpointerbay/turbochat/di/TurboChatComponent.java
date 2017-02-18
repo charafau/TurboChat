@@ -3,6 +3,7 @@ package com.nullpointerbay.turbochat.di;
 import android.content.Context;
 
 import com.nullpointerbay.turbochat.TurboChatBaseApplication;
+import com.nullpointerbay.turbochat.cache.MessageCache;
 import com.nullpointerbay.turbochat.repository.EmojiRepository;
 import com.nullpointerbay.turbochat.repository.MessageRepository;
 import com.nullpointerbay.turbochat.repository.TeamRepository;
@@ -34,5 +35,7 @@ public interface TurboChatComponent {
     UserRepository getUserRepository();
 
     EmojiRepository getEmojiRepository();
+
+    MessageCache getMessageCache();
 
 }

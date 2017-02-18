@@ -4,12 +4,17 @@ import com.nullpointerbay.turbochat.model.Message;
 
 import java.util.List;
 
-import io.reactivex.Single;
+import io.reactivex.Observable;
 
 
 public class MessageRepositoryImpl implements MessageRepository {
     @Override
-    public Single<List<Message>> getMessages() {
+    public Observable<List<Message>> getMessages() {
+        return null;
+    }
+
+    @Override
+    public Observable<Message> sendMessage(Message message) {
         return null;
     }
 }

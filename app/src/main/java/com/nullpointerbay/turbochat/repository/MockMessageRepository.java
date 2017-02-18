@@ -6,12 +6,14 @@ import com.nullpointerbay.turbochat.service.MessageApiService;
 import com.nullpointerbay.turbochat.service.MockMessageApiService;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Single;
+import io.reactivex.Observable;
 import retrofit2.Retrofit;
 import retrofit2.mock.BehaviorDelegate;
 import retrofit2.mock.MockRetrofit;
 import retrofit2.mock.NetworkBehavior;
+import timber.log.Timber;
 
 public class MockMessageRepository implements MessageRepository {
 
@@ -34,7 +36,13 @@ public class MockMessageRepository implements MessageRepository {
     }
 
     @Override
-    public Single<List<Message>> getMessages() {
+    public Observable<List<Message>> getMessages() {
+        Timber.d("getting messages from repo");
         return mockMessageApiService.getMessages();
+    }
+
+    @Override
+    public Observable<Message> sendMessage(Message message) {
+        return Observable.interval(1, TimeUnit.SECONDS).just(message);
     }
 }

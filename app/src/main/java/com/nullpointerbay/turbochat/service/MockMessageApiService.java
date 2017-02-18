@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import io.reactivex.Single;
+import io.reactivex.Observable;
 import retrofit2.mock.BehaviorDelegate;
 
 public class MockMessageApiService implements MessageApiService {
@@ -22,7 +22,7 @@ public class MockMessageApiService implements MessageApiService {
 
 
     @Override
-    public Single<List<Message>> getMessages() {
+    public Observable<List<Message>> getMessages() {
 
         String message = "Good morning! (megusta) (coffee) here is" +
                 " some link\n https://www.youtube.com/watch?v=7Ky6ZaodBkU&t=2473s \nshould " +

@@ -4,7 +4,7 @@ import com.nullpointerbay.turbochat.model.Message;
 
 import java.util.List;
 
-import io.reactivex.Single;
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 
 /**
@@ -13,5 +13,5 @@ import retrofit2.http.GET;
 
 public interface MessageApiService {
     @GET("/messages")
-    Single<List<Message>> getMessages();
+    Observable<List<Message>> getMessages();
 }
