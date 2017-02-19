@@ -10,6 +10,7 @@ import com.nullpointerbay.turbochat.parsers.EmojiParser;
 import com.nullpointerbay.turbochat.parsers.LinkParser;
 import com.nullpointerbay.turbochat.parsers.MentionParser;
 import com.nullpointerbay.turbochat.repository.MessageRepository;
+import com.nullpointerbay.turbochat.utils.UserResolver;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,14 +30,17 @@ public class MessageViewModel {
 
     private final MessageRepository messageRepository;
     private final MessageCache messageCache;
+    private final UserResolver userResolver;
 
     PublishSubject<Message> localMessageStream = PublishSubject.create();
     PublishSubject<Message> apiSendMessageStream = PublishSubject.create();
 
 
-    public MessageViewModel(MessageRepository messageRepository, MessageCache messageCache) {
+    public MessageViewModel(MessageRepository messageRepository, MessageCache messageCache,
+                            UserResolver userResolver) {
         this.messageRepository = messageRepository;
         this.messageCache = messageCache;
+        this.userResolver = userResolver;
     }
 
     public Observable<List<Message>> getMessages() {
@@ -59,10 +63,10 @@ public class MessageViewModel {
         Timber.d("links %s", links.toString());
         Timber.d("emojis %s", emojis.toString());
 
-        final User userYui = new User(3L, "yui", "Yui Kanazawa", "u_yui");
+        final User loggedInUser = userResolver.getLoggedInUser();
 
         final Message m = new Message(id, message, mentions,
-                emojis, links, userYui);
+                emojis, links, loggedInUser);
 
         localMessageStream.onNext(m);
 

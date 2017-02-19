@@ -43,7 +43,7 @@ public class MockMessageRepository implements MessageRepository {
 
     @Override
     public Observable<Message> sendMessage(Message message) {
-        return Observable.interval(1, TimeUnit.SECONDS).just(message);
+        return Observable.interval(3, TimeUnit.SECONDS).just(message);
     }
 
     @Override

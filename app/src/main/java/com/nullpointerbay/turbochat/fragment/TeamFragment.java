@@ -21,6 +21,7 @@ import com.nullpointerbay.turbochat.di.DaggerViewComponent;
 import com.nullpointerbay.turbochat.di.TurboChatComponent;
 import com.nullpointerbay.turbochat.di.ViewModule;
 import com.nullpointerbay.turbochat.model.Team;
+import com.nullpointerbay.turbochat.utils.UrlResolver;
 import com.nullpointerbay.turbochat.viewmodel.TeamViewModel;
 
 import java.util.ArrayList;
@@ -63,27 +64,13 @@ public class TeamFragment extends BaseFragment {
         adapter = new TeamAdapter(new ArrayList<>());
         recyclerTeams.setAdapter(adapter);
 
-//        String message = "Good morning! (megusta) (coffee) here is" +
-//                " some link\n https://www.youtube.com/watch?v=7Ky6ZaodBkU&t=2473s \nshould " +
-//                "be highlighted and @alex is nice";
-//
-//        List<String> emojiList = new ArrayList<>();
-//        emojiList.add("megusta");
-//        emojiList.add("dummy");
-//        emojiList.add("coffee");
-//        final SpannableString spannableString = new SpannableString(message);
-//
-//        final EmojiParser emojiParser = new EmojiParser(getContext(), emojiList, "emoji", (int) (-txtMessage.getPaint().ascent()));
-//        final LinkParser linkParser = new LinkParser(getContext());
-//        final MentionParser mentionParser = new MentionParser(getContext());
-//        emojiParser.insert(spannableString);
-//        linkParser.insert(spannableString);
-//        mentionParser.insert(spannableString);
-//
-//
-//        txtMessage.setText(spannableString);
-//        txtMessage.setMovementMethod(LinkMovementMethod.getInstance());
-
+        final UrlResolver urlResolver = new UrlResolver();
+        urlResolver.getLinkTitle("https://twitter.com/ThePracticalDev/status/820703750574718976")
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        message -> Timber.d("link: %s", message),
+                        throwable -> Timber.e(throwable)
+                );
         adapter.getPositionClick()
                 .subscribe(team -> MessageActivity.start(getContext(), team));
 

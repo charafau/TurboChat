@@ -24,8 +24,9 @@ public class ViewModule {
     }
 
     @Provides
-    public MessageViewModel provideMessageViewModel(MessageRepository messageRepository, MessageCache messageCache) {
-        return new MessageViewModel(messageRepository, messageCache);
+    public MessageViewModel provideMessageViewModel(MessageRepository messageRepository,
+                                                    MessageCache messageCache, UserResolver userResolver) {
+        return new MessageViewModel(messageRepository, messageCache, userResolver);
     }
 
     @Provides
