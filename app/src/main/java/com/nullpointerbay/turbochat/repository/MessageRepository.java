@@ -14,4 +14,6 @@ public interface MessageRepository {
     Observable<List<Message>> getMessages();
 
     Observable<Message> sendMessage(Message message);
+
+    Observable<Message> liveMessageStream();
 }

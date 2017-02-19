@@ -31,7 +31,7 @@ public class MessageViewModel {
     private final MessageCache messageCache;
 
     PublishSubject<Message> localMessageStream = PublishSubject.create();
-    PublishSubject<Message> apiMessageStream = PublishSubject.create();
+    PublishSubject<Message> apiSendMessageStream = PublishSubject.create();
 
 
     public MessageViewModel(MessageRepository messageRepository, MessageCache messageCache) {
@@ -68,8 +68,11 @@ public class MessageViewModel {
 
         messageRepository.sendMessage(m)
                 .subscribeOn(Schedulers.io())
-                .subscribe(serverMessage -> apiMessageStream.onNext(serverMessage),
-                        throwable -> apiMessageStream.onError(throwable));
+                .subscribe(serverMessage -> {
+                            messageCache.addMessage(serverMessage);
+                            apiSendMessageStream.onNext(serverMessage);
+                        },
+                        throwable -> apiSendMessageStream.onError(throwable));
 
     }
 
@@ -115,7 +118,7 @@ public class MessageViewModel {
         return localMessageStream;
     }
 
-    public Observable<Message> apiMessageSteam() {
-        return apiMessageStream;
+    public Observable<Message> apiSendMessageStream() {
+        return apiSendMessageStream;
     }
 }

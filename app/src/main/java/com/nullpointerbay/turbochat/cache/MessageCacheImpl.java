@@ -26,4 +26,12 @@ public class MessageCacheImpl implements MessageCache {
         Timber.d("getting writing to cache");
         messageList = messages;
     }
+
+    @Override
+    public void addMessage(Message serverMessage) {
+        final List<Message> objects = new ArrayList<>();
+        objects.addAll(messageList);
+        objects.add(serverMessage);
+        messageList = objects;
+    }
 }

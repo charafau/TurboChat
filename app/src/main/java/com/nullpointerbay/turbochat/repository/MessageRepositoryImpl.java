@@ -17,4 +17,9 @@ public class MessageRepositoryImpl implements MessageRepository {
     public Observable<Message> sendMessage(Message message) {
         return null;
     }
+
+    @Override
+    public Observable<Message> liveMessageStream() {
+        return null;
+    }
 }

@@ -147,11 +147,11 @@ public class MessageFragment extends BaseFragment {
                         )
         );
 
-        compositeDisposable.add(messageViewModel.apiMessageSteam()
+        compositeDisposable.add(messageViewModel.apiSendMessageStream()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        message -> Timber.d("bla bla %s", message.toString()),
+                        message -> updateMessage(message),
                         throwable -> Timber.e(throwable)
                 ));
 
@@ -195,6 +195,18 @@ public class MessageFragment extends BaseFragment {
             }
             return handled;
         });
+    }
+
+    private void updateMessage(Message message) {
+        Timber.d("updateing message");
+        final List<Message> messages = adapter.messages;
+        for (int i = 0; i < messages.size(); i++) {
+            final Message m = messages.get(i);
+            if (m.getUser().equals(message.getUser()) && m.getText().equals(message.getText())) {
+                adapter.changeMessage(i, message);
+                adapter.notifyItemChanged(i);
+            }
+        }
     }
 
     private void onOpenKeyboard() {
@@ -269,6 +281,10 @@ public class MessageFragment extends BaseFragment {
 
         public void addMessage(Message message) {
             messages.add(message);
+        }
+
+        public void changeMessage(int position, Message message) {
+            messages.set(position, message);
         }
     }
 

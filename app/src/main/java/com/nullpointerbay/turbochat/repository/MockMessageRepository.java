@@ -45,4 +45,14 @@ public class MockMessageRepository implements MessageRepository {
     public Observable<Message> sendMessage(Message message) {
         return Observable.interval(1, TimeUnit.SECONDS).just(message);
     }
+
+    @Override
+    public Observable<Message> liveMessageStream() {
+        /**
+         * here should be websocket connection from server
+         * with pushing messages to viewmodel
+         */
+        return Observable.empty();
+    }
+
 }

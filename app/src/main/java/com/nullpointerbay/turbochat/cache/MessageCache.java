@@ -13,4 +13,5 @@ public interface MessageCache {
 
     void writeToCache(List<Message> messages);
 
+    void addMessage(Message serverMessage);
 }
