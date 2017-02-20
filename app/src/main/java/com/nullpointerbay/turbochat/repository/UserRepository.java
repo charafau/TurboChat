@@ -2,7 +2,7 @@ package com.nullpointerbay.turbochat.repository;
 
 import com.nullpointerbay.turbochat.model.User;
 
-import io.reactivex.Single;
+import io.reactivex.Flowable;
 
 /**
  * Created by charafau on 2017/02/13.
@@ -10,6 +10,6 @@ import io.reactivex.Single;
 
 public interface UserRepository {
 
-    Single<User> getUser(String nick);
+    Flowable<User> getUser(String nick);
 
 }

@@ -4,7 +4,7 @@ import com.nullpointerbay.turbochat.model.User;
 import com.nullpointerbay.turbochat.service.MockUserApiService;
 import com.nullpointerbay.turbochat.service.UserApiService;
 
-import io.reactivex.Single;
+import io.reactivex.Flowable;
 import retrofit2.Retrofit;
 import retrofit2.mock.BehaviorDelegate;
 import retrofit2.mock.MockRetrofit;
@@ -30,7 +30,7 @@ public class MockUserRepository implements UserRepository {
     }
 
     @Override
-    public Single<User> getUser(String nick) {
+    public Flowable<User> getUser(String nick) {
         return mockMessageApiService.getUser(nick);
     }
 }

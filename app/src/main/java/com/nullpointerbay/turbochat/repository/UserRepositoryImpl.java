@@ -2,11 +2,11 @@ package com.nullpointerbay.turbochat.repository;
 
 import com.nullpointerbay.turbochat.model.User;
 
-import io.reactivex.Single;
+import io.reactivex.Flowable;
 
 public class UserRepositoryImpl implements UserRepository {
     @Override
-    public Single<User> getUser(String nick) {
+    public Flowable<User> getUser(String nick) {
         return null;
     }
 }

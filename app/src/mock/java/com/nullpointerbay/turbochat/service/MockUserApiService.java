@@ -2,7 +2,7 @@ package com.nullpointerbay.turbochat.service;
 
 import com.nullpointerbay.turbochat.model.User;
 
-import io.reactivex.Single;
+import io.reactivex.Flowable;
 import retrofit2.http.Query;
 import retrofit2.mock.BehaviorDelegate;
 
@@ -18,7 +18,7 @@ public class MockUserApiService implements UserApiService {
     }
 
     @Override
-    public Single<User> getUser(@Query("nick") String nick) {
+    public Flowable<User> getUser(@Query("nick") String nick) {
 
         final User userBruno = new User(2L, NICK_BRUNO, "Bruno Kanode", "u_bruno");
         final User userAlex = new User(1L, NICK_ALEX, "Alex Smith", "u_alex");

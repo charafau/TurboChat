@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import paperparcel.PaperParcel;
 
 @PaperParcel
-public class User implements Parcelable{
+public class User implements Parcelable {
 
     public static final Creator<User> CREATOR = PaperParcelUser.CREATOR;
 

@@ -3,6 +3,7 @@ package com.nullpointerbay.turbochat.viewmodel;
 import com.nullpointerbay.turbochat.model.Team;
 import com.nullpointerbay.turbochat.model.User;
 import com.nullpointerbay.turbochat.repository.TeamRepository;
+import com.nullpointerbay.turbochat.testutils.TestUtils;
 import com.nullpointerbay.turbochat.utils.UserResolver;
 
 import org.junit.Before;
@@ -34,15 +35,10 @@ public class TeamViewModelTest {
 
     }
 
-    private User createMockUser() {
-        return new User(1L, "alex", "Alex Smith", "u_alex");
-
-    }
-
     @Test
     public void shouldReturnTeamsForLoggedInUser() throws Exception {
 
-        final User mockUser = createMockUser();
+        final User mockUser = TestUtils.createMockUser();
 
         List<Team> teams = new ArrayList<>();
         teams.add(new Team("some random uuid", "team A", "photo url"));
