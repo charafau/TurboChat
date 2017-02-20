@@ -1,6 +1,5 @@
 package com.nullpointerbay.turbochat.repository;
 
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.nullpointerbay.turbochat.model.User;
 import com.nullpointerbay.turbochat.service.MockUserApiService;
 import com.nullpointerbay.turbochat.service.UserApiService;
@@ -20,11 +19,7 @@ public class MockUserRepository implements UserRepository {
     private final NetworkBehavior networkBehavior = NetworkBehavior.create();
     private final MockUserApiService mockMessageApiService;
 
-    public MockUserRepository() {
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://example.com")
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build();
+    public MockUserRepository(Retrofit retrofit) {
 
         final MockRetrofit mockRetrofit = new MockRetrofit.Builder(retrofit)
                 .networkBehavior(networkBehavior).build();

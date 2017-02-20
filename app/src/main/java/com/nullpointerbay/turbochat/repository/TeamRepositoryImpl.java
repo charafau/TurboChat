@@ -1,6 +1,5 @@
 package com.nullpointerbay.turbochat.repository;
 
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.nullpointerbay.turbochat.model.Team;
 import com.nullpointerbay.turbochat.model.User;
 import com.nullpointerbay.turbochat.service.MockTeamApiService;
@@ -19,11 +18,7 @@ public class TeamRepositoryImpl implements TeamRepository {
     private final NetworkBehavior networkBehavior = NetworkBehavior.create();
     private final MockTeamApiService mockTeamApiService;
 
-    public TeamRepositoryImpl() {
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://example.com")
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build();
+    public TeamRepositoryImpl(Retrofit retrofit) {
 
         final MockRetrofit mockRetrofit = new MockRetrofit.Builder(retrofit)
                 .networkBehavior(networkBehavior).build();

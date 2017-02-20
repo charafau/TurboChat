@@ -15,6 +15,7 @@ import com.nullpointerbay.turbochat.utils.UserResolver;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import retrofit2.Retrofit;
 
 @ForApplication
 @Singleton
@@ -40,5 +41,7 @@ public interface TurboChatComponent {
     MessageCache getMessageCache();
 
     UrlResolver getUrlResolver();
+
+    Retrofit getRetrofit();
 
 }

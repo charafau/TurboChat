@@ -21,6 +21,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import retrofit2.Retrofit;
 
 @Module
 public class MockDataModule {
@@ -31,13 +32,13 @@ public class MockDataModule {
     }
 
     @Provides
-    public TeamRepository provideMockTeamRepository() {
-        return new TeamRepositoryImpl();
+    public TeamRepository provideMockTeamRepository(Retrofit retrofit) {
+        return new TeamRepositoryImpl(retrofit);
     }
 
     @Provides
-    public MessageRepository provideMessageRepository() {
-        return new MockMessageRepository();
+    public MessageRepository provideMessageRepository(Retrofit retrofit) {
+        return new MockMessageRepository(retrofit);
     }
 
     @Provides
@@ -46,8 +47,8 @@ public class MockDataModule {
     }
 
     @Provides
-    public UserRepository provideMockUserRepository() {
-        return new MockUserRepository();
+    public UserRepository provideMockUserRepository(Retrofit retrofit) {
+        return new MockUserRepository(retrofit);
     }
 
     @Provides

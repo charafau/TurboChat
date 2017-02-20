@@ -19,6 +19,7 @@ import com.nullpointerbay.turbochat.utils.UserResolverImpl;
 
 import dagger.Module;
 import dagger.Provides;
+import retrofit2.Retrofit;
 
 @Module
 public class DataModule {
@@ -29,8 +30,8 @@ public class DataModule {
     }
 
     @Provides
-    public TeamRepository provideTeamRepository() {
-        return new TeamRepositoryImpl();
+    public TeamRepository provideTeamRepository(Retrofit retrofit) {
+        return new TeamRepositoryImpl(retrofit);
     }
 
     @Provides
