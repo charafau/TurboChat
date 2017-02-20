@@ -31,7 +31,7 @@ public class DataModule {
 
     @Provides
     public TeamRepository provideTeamRepository(Retrofit retrofit) {
-        return new TeamRepositoryImpl(retrofit);
+        return new TeamRepositoryImpl();
     }
 
     @Provides

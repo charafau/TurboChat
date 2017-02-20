@@ -17,15 +17,13 @@ import timber.log.Timber;
 
 public class MockMessageRepository implements MessageRepository {
 
-    private final NetworkBehavior networkBehavior = NetworkBehavior.create();
+    private final NetworkBehavior networkBehavior;
     private final MockMessageApiService mockMessageApiService;
 
 
-    public MockMessageRepository(Retrofit retrofit) {
-
-        final MockRetrofit mockRetrofit = new MockRetrofit.Builder(retrofit)
-                .networkBehavior(networkBehavior).build();
-
+    public MockMessageRepository(Retrofit retrofit, MockRetrofit mockRetrofit,
+                                 NetworkBehavior networkBehavior) {
+        this.networkBehavior = networkBehavior;
         final BehaviorDelegate<MessageApiService> delegate = mockRetrofit.create(MessageApiService.class);
 
         mockMessageApiService = new MockMessageApiService(delegate);
