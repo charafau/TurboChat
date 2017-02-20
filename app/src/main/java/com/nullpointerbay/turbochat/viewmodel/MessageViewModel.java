@@ -34,8 +34,8 @@ public class MessageViewModel {
     private final UserResolver userResolver;
     private final UrlResolver urlResolver;
 
-    PublishSubject<Message> localMessageStream = PublishSubject.create();
-    PublishSubject<Message> apiSendMessageStream = PublishSubject.create();
+    private PublishSubject<Message> localMessageStream = PublishSubject.create();
+    private PublishSubject<Message> apiSendMessageStream = PublishSubject.create();
 
 
     public MessageViewModel(MessageRepository messageRepository, MessageCache messageCache,
@@ -93,7 +93,7 @@ public class MessageViewModel {
         final Set<String> emojis = new HashSet<>();
 
         for (String addedEmoji : pressedEmojis) {
-            final Matcher matcher = EmojiParser.getEmojiParser(message.toString(), addedEmoji);
+            final Matcher matcher = EmojiParser.getEmojiParser(message, addedEmoji);
             while (matcher.find()) {
                 emojis.add(message.substring(matcher.start() + 1, matcher.end() - 1));
             }
@@ -102,11 +102,11 @@ public class MessageViewModel {
         return new ArrayList<>(emojis);
     }
 
-    private List<Link> findLinks(String message) {
+    List<Link> findLinks(String message) {
 
         final List<Link> links = new ArrayList<>();
 
-        final Matcher matcher = LinkParser.getLinkParser(message.toString());
+        final Matcher matcher = LinkParser.getLinkParser(message);
         while (matcher.find()) {
             links.add(new Link(message.substring(matcher.start(), matcher.end()), ""));
         }
