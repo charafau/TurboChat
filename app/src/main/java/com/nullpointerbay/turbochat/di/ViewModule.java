@@ -5,6 +5,7 @@ import com.nullpointerbay.turbochat.repository.EmojiRepository;
 import com.nullpointerbay.turbochat.repository.MessageRepository;
 import com.nullpointerbay.turbochat.repository.TeamRepository;
 import com.nullpointerbay.turbochat.repository.UserRepository;
+import com.nullpointerbay.turbochat.utils.UrlResolver;
 import com.nullpointerbay.turbochat.utils.UserResolver;
 import com.nullpointerbay.turbochat.viewmodel.EmojiViewModel;
 import com.nullpointerbay.turbochat.viewmodel.MessageViewModel;
@@ -25,8 +26,9 @@ public class ViewModule {
 
     @Provides
     public MessageViewModel provideMessageViewModel(MessageRepository messageRepository,
-                                                    MessageCache messageCache, UserResolver userResolver) {
-        return new MessageViewModel(messageRepository, messageCache, userResolver);
+                                                    MessageCache messageCache, UserResolver userResolver,
+                                                    UrlResolver urlResolver) {
+        return new MessageViewModel(messageRepository, messageCache, userResolver, urlResolver);
     }
 
     @Provides

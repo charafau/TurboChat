@@ -3,6 +3,7 @@ package com.nullpointerbay.turbochat.di;
 import android.content.Context;
 
 import com.nullpointerbay.turbochat.TurboChatBaseApplication;
+import com.nullpointerbay.turbochat.utils.UrlResolver;
 
 import javax.inject.Singleton;
 
@@ -22,5 +23,11 @@ public class TurboChatModule {
     @Singleton
     public Context provideContext() {
         return application;
+    }
+
+    @Provides
+    @Singleton
+    public UrlResolver provideUrlResolver() {
+        return new UrlResolver();
     }
 }

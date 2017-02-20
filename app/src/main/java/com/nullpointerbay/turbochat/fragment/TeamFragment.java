@@ -21,7 +21,6 @@ import com.nullpointerbay.turbochat.di.DaggerViewComponent;
 import com.nullpointerbay.turbochat.di.TurboChatComponent;
 import com.nullpointerbay.turbochat.di.ViewModule;
 import com.nullpointerbay.turbochat.model.Team;
-import com.nullpointerbay.turbochat.utils.UrlResolver;
 import com.nullpointerbay.turbochat.viewmodel.TeamViewModel;
 
 import java.util.ArrayList;
@@ -64,13 +63,13 @@ public class TeamFragment extends BaseFragment {
         adapter = new TeamAdapter(new ArrayList<>());
         recyclerTeams.setAdapter(adapter);
 
-        final UrlResolver urlResolver = new UrlResolver();
-        urlResolver.getLinkTitle("https://twitter.com/ThePracticalDev/status/820703750574718976")
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                        message -> Timber.d("link: %s", message),
-                        throwable -> Timber.e(throwable)
-                );
+//        final UrlResolver urlResolver = new UrlResolver();
+//        urlResolver.getLinkTitle("https://twitter.com/ThePracticalDev/status/820703750574718976")
+//                .subscribeOn(Schedulers.io())
+//                .subscribe(
+//                        message -> Timber.d("link: %s", message),
+//                        throwable -> Timber.e(throwable)
+//                );
         adapter.getPositionClick()
                 .subscribe(team -> MessageActivity.start(getContext(), team));
 

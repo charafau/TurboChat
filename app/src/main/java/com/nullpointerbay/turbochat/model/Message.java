@@ -94,4 +94,16 @@ public class Message implements Parcelable {
     public void writeToParcel(Parcel parcel, int flags) {
         PaperParcelMessage.writeToParcel(this, parcel, flags);
     }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", mentions=" + mentions +
+                ", emoticons=" + emoticons +
+                ", links=" + links +
+                ", user=" + user +
+                '}';
+    }
 }

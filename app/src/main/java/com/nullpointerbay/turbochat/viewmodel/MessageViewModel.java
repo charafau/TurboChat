@@ -10,6 +10,7 @@ import com.nullpointerbay.turbochat.parsers.EmojiParser;
 import com.nullpointerbay.turbochat.parsers.LinkParser;
 import com.nullpointerbay.turbochat.parsers.MentionParser;
 import com.nullpointerbay.turbochat.repository.MessageRepository;
+import com.nullpointerbay.turbochat.utils.UrlResolver;
 import com.nullpointerbay.turbochat.utils.UserResolver;
 
 import java.util.ArrayList;
@@ -31,16 +32,18 @@ public class MessageViewModel {
     private final MessageRepository messageRepository;
     private final MessageCache messageCache;
     private final UserResolver userResolver;
+    private final UrlResolver urlResolver;
 
     PublishSubject<Message> localMessageStream = PublishSubject.create();
     PublishSubject<Message> apiSendMessageStream = PublishSubject.create();
 
 
     public MessageViewModel(MessageRepository messageRepository, MessageCache messageCache,
-                            UserResolver userResolver) {
+                            UserResolver userResolver, UrlResolver urlResolver) {
         this.messageRepository = messageRepository;
         this.messageCache = messageCache;
         this.userResolver = userResolver;
+        this.urlResolver = urlResolver;
     }
 
     public Observable<List<Message>> getMessages() {
@@ -70,8 +73,13 @@ public class MessageViewModel {
 
         localMessageStream.onNext(m);
 
-        messageRepository.sendMessage(m)
+        Observable.just(links)
                 .subscribeOn(Schedulers.io())
+                .flatMapIterable(link -> link)
+                .map(link -> urlResolver.getLinkTitle(link.getUrl()))
+                .toList()
+                .map(lnks -> new Message(id, message, mentions, emojis, lnks, loggedInUser))
+                .flatMap(messageRepository::sendMessage)
                 .subscribe(serverMessage -> {
                             messageCache.addMessage(serverMessage);
                             apiSendMessageStream.onNext(serverMessage);

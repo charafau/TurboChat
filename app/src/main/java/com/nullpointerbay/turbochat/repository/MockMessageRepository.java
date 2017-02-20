@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import retrofit2.Retrofit;
 import retrofit2.mock.BehaviorDelegate;
 import retrofit2.mock.MockRetrofit;
@@ -42,8 +43,8 @@ public class MockMessageRepository implements MessageRepository {
     }
 
     @Override
-    public Observable<Message> sendMessage(Message message) {
-        return Observable.interval(3, TimeUnit.SECONDS).just(message);
+    public Single<Message> sendMessage(Message message) {
+        return Single.timer(2, TimeUnit.SECONDS).just(message);
     }
 
     @Override

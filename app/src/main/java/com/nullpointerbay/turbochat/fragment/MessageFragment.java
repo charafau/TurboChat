@@ -198,7 +198,7 @@ public class MessageFragment extends BaseFragment {
     }
 
     private void updateMessage(Message message) {
-        Timber.d("updateing message");
+        Timber.d("update message %s", message);
         final List<Message> messages = adapter.messages;
         for (int i = 0; i < messages.size(); i++) {
             final Message m = messages.get(i);

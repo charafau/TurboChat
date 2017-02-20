@@ -1,11 +1,13 @@
 package com.nullpointerbay.turbochat.utils;
 
+import com.nullpointerbay.turbochat.model.Link;
+
 import java.io.IOException;
 
-import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import timber.log.Timber;
 
 /**
  * Created by charafau on 2017/02/20.
@@ -13,28 +15,31 @@ import okhttp3.Response;
 
 public class UrlResolver {
 
-    public Observable<String> getLinkTitle(String url) {
+    public Link getLinkTitle(String url) {
 
-        return Observable.create(subscriber -> {
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .url(url)
-                    .build();
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
 
+
+        try {
             final Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
                 final String body = response.body().string();
 
                 StringBuilder sb = new StringBuilder();
                 sb.append(body, body.indexOf("<title>") + 7, body.lastIndexOf("</title>"));
+                return new Link(url, sb.toString());
 
-                subscriber.onNext(sb.toString());
-                subscriber.onComplete();
             } else {
-                subscriber.onError(new IOException("Error " + response.message()));
+                return new Link(url, "");
             }
+        } catch (IOException e) {
+            Timber.e(e);
+        }
 
-        });
+        return new Link(url, "");
 
     }
 

@@ -9,6 +9,7 @@ import com.nullpointerbay.turbochat.repository.MessageRepository;
 import com.nullpointerbay.turbochat.repository.TeamRepository;
 import com.nullpointerbay.turbochat.repository.UserRepository;
 import com.nullpointerbay.turbochat.utils.ImageLoader;
+import com.nullpointerbay.turbochat.utils.UrlResolver;
 import com.nullpointerbay.turbochat.utils.UserResolver;
 
 import javax.inject.Singleton;
@@ -37,5 +38,7 @@ public interface TurboChatComponent {
     EmojiRepository getEmojiRepository();
 
     MessageCache getMessageCache();
+
+    UrlResolver getUrlResolver();
 
 }
