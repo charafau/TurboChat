@@ -25,7 +25,7 @@ public class MockMessageApiService implements MessageApiService {
     public Observable<List<Message>> getMessages() {
 
         String message = "Good morning! (megusta) (coffee) here is" +
-                " some link\n https://www.youtube.com/watch?v=7Ky6ZaodBkU&t=2473s \nshould " +
+                " some link\n https://www.google.com \nshould " +
                 "be highlighted and @bruno is nice";
 
         final User userBruno = new User(2L, "bruno", "Bruno Kanode", "u_bruno");
@@ -34,7 +34,7 @@ public class MockMessageApiService implements MessageApiService {
         final List<Message> messages = new ArrayList<>();
 
         messages.add(new Message(1L, message, Arrays.asList("bruno"), Arrays.asList("megusta", "coffee"),
-                Arrays.asList(new Link("https://www.youtube.com/watch?v=7Ky6ZaodBkU&t=2473s", "YouTube")),
+                Arrays.asList(new Link("https://www.google.com", "YouTube")),
                 userAlex));
         messages.add(new Message(2L, "@alex I feel (awesome) when programming (android)",
                 Arrays.asList("bruno"), Arrays.asList("awesome", "android"),

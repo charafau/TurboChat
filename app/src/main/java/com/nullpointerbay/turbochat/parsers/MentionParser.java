@@ -9,9 +9,6 @@ import com.nullpointerbay.turbochat.spans.MentionLinkSpan;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by charafau on 2017/02/12.
- */
 
 public class MentionParser implements ItemParser {
 
