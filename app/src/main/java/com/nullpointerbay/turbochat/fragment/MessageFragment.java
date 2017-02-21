@@ -184,6 +184,7 @@ public class MessageFragment extends BaseFragment {
         editComment.setOnFocusChangeListener((view, hasFocus) -> onOpenKeyboard());
 
         editComment.setOnClickListener(view -> onOpenKeyboard());
+        editComment.requestFocus();
 
         editComment.setOnEditorActionListener((textView, actionId, keyEvent) -> {
 
@@ -211,8 +212,10 @@ public class MessageFragment extends BaseFragment {
     }
 
     private void onOpenKeyboard() {
-        frameEmojis.setVisibility(View.GONE);
-        recyclerMessages.smoothScrollToPosition(recyclerMessages.getAdapter().getItemCount());
+        editComment.post(() -> {
+            frameEmojis.setVisibility(View.GONE);
+            recyclerMessages.smoothScrollToPosition(recyclerMessages.getAdapter().getItemCount());
+        });
     }
 
     private void insertEmoji(String emojiText) {
