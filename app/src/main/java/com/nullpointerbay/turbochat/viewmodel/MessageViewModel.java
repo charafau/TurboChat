@@ -88,7 +88,7 @@ public class MessageViewModel {
 
     }
 
-    private List<String> findEmojis(String message, List<String> pressedEmojis) {
+    List<String> findEmojis(String message, List<String> pressedEmojis) {
 
         final Set<String> emojis = new HashSet<>();
 
@@ -115,7 +115,7 @@ public class MessageViewModel {
     }
 
     @NonNull
-    private List<String> findMentions(String message) {
+    List<String> findMentions(String message) {
         final List<String> mentions = new ArrayList<>();
 
         final Matcher matcher = MentionParser.getMatcher(message);
