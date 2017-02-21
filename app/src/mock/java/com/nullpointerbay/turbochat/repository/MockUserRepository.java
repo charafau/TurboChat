@@ -10,9 +10,6 @@ import retrofit2.mock.BehaviorDelegate;
 import retrofit2.mock.MockRetrofit;
 import retrofit2.mock.NetworkBehavior;
 
-/**
- * Created by charafau on 2017/02/13.
- */
 
 public class MockUserRepository implements UserRepository {
 

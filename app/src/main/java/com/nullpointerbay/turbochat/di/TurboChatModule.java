@@ -10,6 +10,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
 @Module
@@ -29,14 +30,23 @@ public class TurboChatModule {
 
     @Provides
     @Singleton
-    public UrlResolver provideUrlResolver() {
-        return new UrlResolver();
+    public UrlResolver provideUrlResolver(OkHttpClient okHttpClient) {
+        return new UrlResolver(okHttpClient);
     }
 
     @Provides
     @Singleton
-    public Retrofit provideRetrofit() {
+    public OkHttpClient provideOkHttpClient() {
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .build();
+        return okHttpClient;
+    }
+
+    @Provides
+    @Singleton
+    public Retrofit provideRetrofit(OkHttpClient okHttpClient) {
         final Retrofit retrofit = new Retrofit.Builder()
+                .client(okHttpClient)
                 .baseUrl("http://example.com")
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
