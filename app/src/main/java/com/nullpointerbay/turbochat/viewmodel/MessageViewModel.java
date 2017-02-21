@@ -20,7 +20,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 
 import io.reactivex.Observable;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.Scheduler;
 import io.reactivex.subjects.PublishSubject;
 import timber.log.Timber;
 
@@ -55,7 +55,7 @@ public class MessageViewModel {
         return Observable.concat(cache, network);
     }
 
-    public void sendMessage(String message, List<String> pressedEmojis) {
+    public void sendMessage(String message, List<String> pressedEmojis, Scheduler apiMessageSendScheduler) {
 
 
         List<String> mentions = findMentions(message);
@@ -74,7 +74,7 @@ public class MessageViewModel {
         localMessageStream.onNext(m);
 
         Observable.just(links)
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(apiMessageSendScheduler)
                 .flatMapIterable(link -> link)
                 .map(link -> urlResolver.getLinkTitle(link.getUrl()))
                 .toList()

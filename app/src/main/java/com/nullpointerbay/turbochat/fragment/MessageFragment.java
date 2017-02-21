@@ -189,7 +189,8 @@ public class MessageFragment extends BaseFragment {
 
             boolean handled = false;
             if (actionId == EditorInfo.IME_ACTION_SEND) {
-                messageViewModel.sendMessage(textView.getText().toString(), pressedEmojis);
+                messageViewModel.sendMessage(textView.getText().toString(), pressedEmojis,
+                        Schedulers.io());
                 handled = true;
                 editComment.setText("");
             }
