@@ -120,7 +120,7 @@ public class MessageViewModel {
 
         final Matcher matcher = MentionParser.getMatcher(message);
         while (matcher.find()) {
-            mentions.add(message.substring(matcher.start(), matcher.end()));
+            mentions.add(message.substring(matcher.start() + 1, matcher.end()));
         }
 
         return mentions;

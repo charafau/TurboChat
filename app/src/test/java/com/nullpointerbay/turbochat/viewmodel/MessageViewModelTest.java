@@ -74,7 +74,7 @@ public class MessageViewModelTest {
 
         final List<String> mentions = messageViewModel.findMentions(message);
 
-        assertEquals(asList("@alex", "@yui"), mentions);
+        assertEquals(asList("alex", "yui"), mentions);
     }
 
     @Test
@@ -213,7 +213,7 @@ public class MessageViewModelTest {
         final TestSubscriber<Message> userTestSubscriber = new TestSubscriber<>();
         final Observable<Message> messageViewModelMessages = messageViewModel.localMessageStream();
         messageViewModelMessages.toFlowable(BackpressureStrategy.LATEST).subscribe(userTestSubscriber);
-        final Message m = new Message(id, message, Arrays.asList("@alex", "@yui"),
+        final Message m = new Message(id, message, Arrays.asList("alex", "yui"),
                 Arrays.asList("love"), expectedLinks, TestUtils.createMockUser());
 
         messageViewModel.sendMessage(message, Arrays.asList("love"), sendScheduler);
@@ -226,20 +226,9 @@ public class MessageViewModelTest {
 
         String message = "hello @alex http://youtube.com/q=look (love) there @yui you go http://twitter.com";
 
-//        final List<Link> inputLinks = asList(
-//                new Link("http://youtube.com/q=look", ""),
-//                new Link("http://twitter.com", ""));
-
         when(userResolver.getLoggedInUser()).thenReturn(TestUtils.createMockUser());
         when(urlResolver.getLinkTitle("http://youtube.com/q=look")).thenReturn(new Link("http://youtube.com/q=look", "youtube"));
         when(urlResolver.getLinkTitle("http://twitter.com")).thenReturn(new Link("http://twitter.com", "twitter"));
-
-
-//        final TestSubscriber<Message> userTestSubscriber = new TestSubscriber<>();
-//        final Observable<Message> messageViewModelMessages = messageViewModel.apiSendMessageStream();
-//        messageViewModelMessages.toFlowable(BackpressureStrategy.LATEST).subscribe(userTestSubscriber);
-//        final Message m = new Message(id, message, Arrays.asList("@alex", "@yui"),
-//                Arrays.asList("love"), inputLinks, TestUtils.createMockUser());
 
         messageViewModel.sendMessage(message, Arrays.asList("love"), sendScheduler);
 
@@ -248,13 +237,10 @@ public class MessageViewModelTest {
                 new Link("http://youtube.com/q=look", "youtube"),
                 new Link("http://twitter.com", "twitter"));
 
-        final Message outputMessage = new Message(id, message, Arrays.asList("@alex", "@yui"),
+        final Message outputMessage = new Message(id, message, Arrays.asList("alex", "yui"),
                 Arrays.asList("love"), expectedLinks, TestUtils.createMockUser());
 
         verify(messageRepository).sendMessage(outputMessage);
-//
-//        userTestSubscriber.assertValue(outputMessage);
-
 
     }
 
@@ -276,7 +262,7 @@ public class MessageViewModelTest {
         final List<Link> expectedLinks = asList(
                 new Link("http://youtube.com/q=look", "youtube"),
                 new Link("http://twitter.com", "twitter"));
-        final Message outputMessage = new Message(id, message, Arrays.asList("@alex", "@yui"),
+        final Message outputMessage = new Message(id, message, Arrays.asList("alex", "yui"),
                 Arrays.asList("love"), expectedLinks, TestUtils.createMockUser());
 
         when(messageRepository.sendMessage(outputMessage)).thenReturn(Single.just(outputMessage));
