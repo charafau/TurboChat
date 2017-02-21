@@ -17,6 +17,8 @@ import com.nullpointerbay.turbochat.utils.MockImageLoader;
 import com.nullpointerbay.turbochat.utils.MockUserResolverImpl;
 import com.nullpointerbay.turbochat.utils.UserResolver;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -68,7 +70,12 @@ public class MockDataModule {
 
     @Provides
     public NetworkBehavior provideNetworkBehavior() {
-        return  NetworkBehavior.create();
+        final NetworkBehavior networkBehavior = NetworkBehavior.create();
+        networkBehavior.setDelay(2, TimeUnit.SECONDS);
+        networkBehavior.setVariancePercent(20);
+        networkBehavior.setFailurePercent(0);
+
+        return networkBehavior;
     }
 
     @Provides
