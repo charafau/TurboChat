@@ -1,9 +1,6 @@
-
 package com.nullpointerbay.turbochat.activity;
 
 
-import android.app.Instrumentation;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.filters.LargeTest;
@@ -20,32 +17,26 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsInstanceOf;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import io.reactivex.plugins.RxJavaPlugins;
+
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
-@Ignore
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class TeamActivityNaviagationTest {
+public class MainActivityLoadDataTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
-    private RxIdlingResource rxIdlingResource;
 
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
@@ -66,27 +57,18 @@ public class TeamActivityNaviagationTest {
         };
     }
 
-    @Before
-    public void setUp() throws Exception {
-        Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
-        rxIdlingResource = new RxIdlingResource();
+    @BeforeClass
+    public static void setUp() throws Exception {
+        RxIdlingResource rxIdlingResource = new RxIdlingResource();
         Espresso.registerIdlingResources(rxIdlingResource);
+        RxJavaPlugins.setScheduleHandler(rxIdlingResource);
 
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        Espresso.unregisterIdlingResources(rxIdlingResource);
     }
 
     @Test
-    public void teamActivityNaviagationTest() {
-        ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.recycler_teams), isDisplayed()));
-        recyclerView.perform(actionOnItemAtPosition(0, click()));
-
+    public void mainActivityLoadDataTest() {
         ViewInteraction textView = onView(
-                allOf(withText("Java developer team"),
+                allOf(withText("Teams"),
                         childAtPosition(
                                 allOf(withId(R.id.toolbar),
                                         childAtPosition(
@@ -94,26 +76,9 @@ public class TeamActivityNaviagationTest {
                                                 0)),
                                 1),
                         isDisplayed()));
-        textView.check(matches(withText("Java developer team")));
+        textView.check(matches(withText("Teams")));
 
         ViewInteraction textView2 = onView(
-                allOf(withText("Messages"),
-                        childAtPosition(
-                                allOf(withId(R.id.toolbar),
-                                        childAtPosition(
-                                                IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-                                                0)),
-                                2),
-                        isDisplayed()));
-        textView2.check(matches(withText("Messages")));
-
-        ViewInteraction appCompatImageButton = onView(
-                allOf(withContentDescription("Navigate up"),
-                        withParent(withId(R.id.toolbar)),
-                        isDisplayed()));
-        appCompatImageButton.perform(click());
-
-        ViewInteraction textView3 = onView(
                 allOf(withText("Turbo Chat"),
                         childAtPosition(
                                 allOf(withId(R.id.toolbar),
@@ -122,7 +87,17 @@ public class TeamActivityNaviagationTest {
                                                 0)),
                                 0),
                         isDisplayed()));
-        textView3.check(matches(withText("Turbo Chat")));
+        textView2.check(matches(withText("Turbo Chat")));
+
+        ViewInteraction textView3 = onView(
+                allOf(withId(R.id.txt_team_name), withText("Java developer team"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.card_view),
+                                        0),
+                                1),
+                        isDisplayed()));
+        textView3.check(matches(withText("Java developer team")));
 
     }
 }
